@@ -14,7 +14,7 @@ from bot_template import path_to
 
 from .state import State
 
-HIDDEN_TERRAIN_PENALTY = 5
+HIDDEN_TERRAIN_PENALTY = 1
 OBSTACLE_COST = 3
 
 

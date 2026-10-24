@@ -1,7 +1,7 @@
 from bot_client import MarsView
-from find_ore import FindOreState, SearchArea
+from states.find_ore import FindOreState, SearchArea
 
-class FindAnyOreState(FindOreState):
+class FindGoldState(FindOreState):
     """Greedily seek the closest gold deposit."""
 
     def __init__(self, view: MarsView, area: SearchArea | None = None) -> None:

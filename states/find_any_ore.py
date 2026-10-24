@@ -1,6 +1,5 @@
 from bot_client import MarsView
-
-from find_ore import FindOreState, SearchArea
+from states.find_ore import FindOreState, SearchArea
 
 class FindAnyOreState(FindOreState):
     """Greedily seek the closest reachable iron or gold deposit."""

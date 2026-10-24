@@ -4,6 +4,7 @@ from typing import TypedDict
 from bot_client import Action, Coordinate, Direction, MarsView, MoveAction, Resource, SimpleAction
 from bot_template import path_to
 from states.state import State
+from map_state import MapState
 
 
 _DIRECTION_BY_DELTA: dict[tuple[int, int], Direction] = {
@@ -31,7 +32,7 @@ class FindOreState(State):
     """Move to visible ore, optionally filtering for one resource."""
 
     def __init__(
-        self, view: MarsView, resource: Resource | None, area: SearchArea | None = None
+        self, view: MapState, resource: Resource | None, area: SearchArea | None = None
     ) -> None:
         if resource is not None and resource not in ("iron", "gold"):
             raise ValueError(f"Unsupported ore resource: {resource}")
@@ -47,7 +48,7 @@ class FindOreState(State):
         best_ore_path: list[Coordinate] | None = None
         best_ore_index: int | None = None
 
-        for index, cell in enumerate(self.grid["cells"]):
+        for index, cell in enumerate(self.view.map["cells"]):
             if cell["type"] not in ("iron", "gold"):
                 continue
             if self.resource is not None and cell["type"] != self.resource:
@@ -55,8 +56,8 @@ class FindOreState(State):
             if cell.get("amount", 0) <= 0:
                 continue
 
-            x = index % self.grid["width"]
-            y = index // self.grid["width"]
+            x = index % self.view.map["width"]
+            y = index // self.view.map["width"]
             if bounds is not None:
                 left, top, right, bottom = bounds
                 if not (left <= x < right and top <= y < bottom):
@@ -67,10 +68,10 @@ class FindOreState(State):
                 "y": y,
             }
             route = path_to(
-                self.grid,
+                self.view.map,
                 start,
                 target,
-                bases=self.view["bases"],
+                bases=self.view.bases,
                 team_id=bot.team_id,
             )
             if route is None:
@@ -94,8 +95,8 @@ class FindOreState(State):
     def _area_bounds(self) -> tuple[int, int, int, int] | None:
         if self.area is None:
             return None
-        map_width = self.grid["width"]
-        map_height = self.grid["height"]
+        map_width = self.view.map["width"]
+        map_height = self.view.map["height"]
         left = max(0, self.area["x"])
         top = max(0, self.area["y"])
         right = min(map_width, self.area["x"] + self.area["width"])
@@ -109,11 +110,11 @@ class FindOreState(State):
     ) -> Action:
         left, top, right, bottom = bounds
         candidates: list[tuple[int, int, Coordinate]] = []
-        for index, cell in enumerate(self.grid["cells"]):
+        for index, cell in enumerate(self.view.map["cells"]):
             if cell["type"] in ("hidden", "void"):
                 continue
-            x = index % self.grid["width"]
-            y = index // self.grid["width"]
+            x = index % self.view.map["width"]
+            y = index // self.view.map["width"]
             if left <= x < right and top <= y < bottom:
                 target: Coordinate = {"x": x, "y": y}
                 distance = abs(x - start["x"]) + abs(y - start["y"])
@@ -121,10 +122,10 @@ class FindOreState(State):
 
         for _, _, target in sorted(candidates):
             route = path_to(
-                self.grid,
+                self.view.map,
                 start,
                 target,
-                bases=self.view["bases"],
+                bases=self.view.bases,
                 team_id=bot.team_id,
             )
             if route:
@@ -132,9 +133,9 @@ class FindOreState(State):
         return SimpleAction(type="pass")
 
     def _move_toward_rich_center(self, bot: Bot, start: Coordinate) -> Action:
-        area = self.view["highGoldArea"]
-        map_width = self.grid["width"]
-        map_height = self.grid["height"]
+        area = self.view.highGoldArea
+        map_width = self.view.map["width"]
+        map_height = self.view.map["height"]
         area_width = min(area["width"], map_width)
         area_height = min(area["height"], map_height)
         left = (map_width - area_width) // 2
@@ -147,7 +148,7 @@ class FindOreState(State):
 
         start_distance = center_distance(start)
         candidates: list[tuple[float, int, Coordinate]] = []
-        for index, cell in enumerate(self.grid["cells"]):
+        for index, cell in enumerate(self.view.map["cells"]):
             if cell["type"] in ("hidden", "void"):
                 continue
             target: Coordinate = {
@@ -160,10 +161,10 @@ class FindOreState(State):
 
         for _, _, target in sorted(candidates):
             route = path_to(
-                self.grid,
+                self.view.map,
                 start,
                 target,
-                bases=self.view["bases"],
+                bases=self.view.bases,
                 team_id=bot.team_id,
             )
             if route:

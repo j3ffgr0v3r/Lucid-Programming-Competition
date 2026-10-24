@@ -3,6 +3,7 @@ import unittest
 from bot import Bot
 from manager import Manager
 from states.build_base import BuildBase
+from states.find_any_ore import FindAnyOreState
 
 
 class BuildBaseTests(unittest.TestCase):
@@ -151,7 +152,7 @@ class BuildBaseTests(unittest.TestCase):
         self.assertEqual(self.state.next_action(other)[1]["type"], "pass")
 
     def test_manager_discovers_state_and_preserves_build_assignment(self):
-        self.worker["position"] = {"x": 2, "y": 1}
+        self.worker["position"] = {"x": 3, "y": 2}
         self.view["units"].extend([self.unit("other-1", 0, 0), self.unit("other-2", 6, 4)])
         self.view["teamResources"]["ours"]["iron"] = 6
         snapshot = {"match": {"matchId": "test"}, "view": self.view}
@@ -199,14 +200,81 @@ class BuildBaseTests(unittest.TestCase):
         self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
         step, action = self.act()
         self.assertEqual(action["type"], "move")
-        self.assertEqual(self.bot.build_target, {"x": 4, "y": 3})
+        self.assertEqual(self.bot.build_target, {"x": 3, "y": 2})
         self.assertIsNone(self.bot.build_site)
         self.assertIsNotNone(step)
+
+    def test_center_coverage_prefers_interior_over_a_more_distant_corner(self):
+        self.base(0, 0)
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        self.act()
+        self.assertEqual(self.bot.build_target, {"x": 3, "y": 2})
+        # A radius-two diamond here covers all nine center tiles; a corner covers six.
+        covered = sum(abs(x - 3) + abs(y - 2) <= 2 for x in range(2, 5) for y in range(1, 4))
+        self.assertEqual(covered, 9)
+
+    def test_new_base_adds_maximum_unclaimed_center_territory(self):
+        self.base(2, 1)
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        self.act()
+        existing = {(x, y) for x in range(2, 5) for y in range(1, 4) if abs(x - 2) + abs(y - 1) <= 2}
+        def added(x, y):
+            return sum((cx, cy) not in existing and abs(cx - x) + abs(cy - y) <= 2
+                       for cx in range(2, 5) for cy in range(1, 4))
+        target = self.bot.build_target
+        self.assertEqual(added(target["x"], target["y"]), max(added(x, y) for x in range(2, 5) for y in range(1, 4)))
 
     def test_invalid_target_is_rejected(self):
         for target in ({"x": -1, "y": 0}, {"x": 7, "y": 0}, {"x": 0.5, "y": 0}):
             with self.subTest(target=target), self.assertRaises(ValueError):
                 self.state.assign(self.bot, target)
+
+    def test_low_iron_search_uses_base_destination_not_nearer_remote_ore(self):
+        self.view["teamResources"]["ours"]["iron"] = 5
+        self.bot.update_coordinates((3, 2))
+        self.worker["position"] = {"x": 3, "y": 2}
+        self.grid["cells"][2 * 7 + 2] = {"type": "gold", "amount": 5}
+        self.grid["cells"][2 * 7 + 5] = {"type": "gold", "amount": 5}
+        template = FindAnyOreState(self.view)
+        self.state.states["FindAnyOreState"] = template
+        self.state.assign(self.bot, {"x": 5, "y": 2})
+        _, action = self.act()
+        self.assertIn(action["direction"], ("east", "north-east", "south-east"))
+        search = self.state._ore_searches[self.bot.id][1]
+        self.assertEqual(search.area, {"x": 3, "y": 0, "width": 4, "height": 5})
+        self.assertIsNone(template.area)
+        self.assertEqual(self.bot.build_target, {"x": 5, "y": 2})
+
+    def test_center_ore_search_is_clipped_and_moves_toward_unseen_target(self):
+        self.view["teamResources"]["ours"]["iron"] = 5
+        self.state.states["FindAnyOreState"] = FindAnyOreState(self.view)
+        for x in range(2, 5):
+            for y in range(1, 4):
+                self.cell(x, y, "hidden")
+        self.state.assign(self.bot, {"x": 4, "y": 3}, center_only=True)
+        step, action = self.act()
+        self.assertEqual(action["type"], "move")
+        self.assertEqual(step["x"], 1)
+        search = self.state._ore_searches[self.bot.id][1]
+        self.assertEqual(search.area, {"x": 2, "y": 1, "width": 3, "height": 3})
+
+    def test_ore_search_instances_are_reused_and_independent_between_builders(self):
+        self.view["teamResources"]["ours"]["iron"] = 5
+        self.state.states["FindAnyOreState"] = FindAnyOreState(self.view)
+        other = Bot("Other", "other", "ours", (6, 4))
+        self.view["units"].append(self.unit("other", 6, 4))
+        self.state.assign(self.bot, {"x": 0, "y": 0})
+        self.state.assign(other, {"x": 6, "y": 4})
+        self.state.update(self.view, "ours")
+        self.state.next_action(self.bot)
+        first = self.state._ore_searches[self.bot.id][1]
+        self.state.next_action(other)
+        second = self.state._ore_searches[other.id][1]
+        self.assertIsNot(first, second)
+        self.assertEqual(first.area, {"x": 0, "y": 0, "width": 3, "height": 3})
+        self.assertEqual(second.area, {"x": 4, "y": 2, "width": 3, "height": 3})
+        self.act()
+        self.assertIs(self.state._ore_searches[self.bot.id][1], first)
 
 
 if __name__ == "__main__":

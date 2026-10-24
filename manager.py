@@ -15,6 +15,9 @@ from map_state import MapState
 from states.state import State
 
 
+TRADE_TURNS_LEFT = 100
+CENTER_SEARCH_BUFFER = 3
+
 
 def bot_costs() -> Iterator[int]:
     """Yield successive worker prices in banked iron: 5, 6, 11, 17, ..."""
@@ -34,6 +37,7 @@ class Manager:
 
         self.team_id = identity["teamId"]
         self.match_id = game_state["match"]["matchId"]
+        self.max_turns = game_state["match"].get("maxTurns", 480)
         self.bots: dict[str, Bot] = {}
         self._bot_costs = bot_costs()
         self._recruited_workers = 0
@@ -74,6 +78,15 @@ class Manager:
             (0, 0, max(1, half_x), max(1, half_y)),
             (half_x, half_y, width - half_x, height - half_y),
         )]
+        rich = self.map_state.highGoldArea
+        center_width, center_height = min(width, rich["width"]), min(height, rich["height"])
+        center_left, center_top = (width - center_width) // 2, (height - center_height) // 2
+        left, top = max(0, center_left - CENTER_SEARCH_BUFFER), max(0, center_top - CENTER_SEARCH_BUFFER)
+        right = min(width, center_left + center_width + CENTER_SEARCH_BUFFER)
+        bottom = min(height, center_top + center_height + CENTER_SEARCH_BUFFER)
+        self.center_search_area = search_area_class(x=left, y=top, width=right - left, height=bottom - top)
+        self.center_area_index = len(self.search_areas)
+        self.search_areas.append(self.center_search_area)
         self.states: dict[str, State] = {
             name: state_class(self.map_state, whole_map) if name in ore_names else state_class(self.map_state)
             for name, state_class in state_classes.items()
@@ -86,11 +99,20 @@ class Manager:
         self._all_states = list(self.states.values()) + [
             state for instances in self.ore_states.values() for state in instances
         ]
+        # Alias the existing regional instance for Trade's post-banking search.
+        self.states["CenterOre"] = self.ore_states["FindAnyOreState"][self.center_area_index]
         for state in self._all_states:
             state.states = self.states
 
     def strategize(self):
         """Recruit first, then spread center bases and assign remaining miners."""
+        if self.max_turns - self.turn <= TRADE_TURNS_LEFT:
+            self.states["BuildBase"].set_iron_budget(0)
+            for bot in self.bots.values():
+                bot.set_state("Trade")
+                bot.search_area_index = None
+            return
+
         center = {"x": self.game_map["width"] // 2, "y": self.game_map["height"] // 2}
         our_bases = [base for base in self.map_state.bases if base["teamId"] == self.team_id]
 
@@ -137,7 +159,9 @@ class Manager:
                 bot.search_area_index = None
             else:
                 bot.set_state(ore_state_name)
-                bot.search_area_index = miners % len(self.search_areas)
+                bot.search_area_index = (
+                    self.center_area_index if len(our_bases) >= 3 else miners % self.center_area_index
+                )
                 miners += 1
         
 

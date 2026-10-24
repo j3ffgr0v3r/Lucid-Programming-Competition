@@ -9,7 +9,7 @@ class SpawnPriorityTests(unittest.TestCase):
         self.view = {
             "turn": 1,
             "map": {"width": 9, "height": 9, "cells": [{"type": "empty"} for _ in range(81)]},
-            "units": [self.worker("center", 5, 5), self.worker("north", 0, 0), self.worker("south", 8, 8)],
+            "units": [self.worker("center", 4, 4), self.worker("north", 0, 0), self.worker("south", 8, 8)],
             "bases": [{"baseId": "home", "teamId": "ours", "position": {"x": 0, "y": 1}}],
             "teamResources": {"ours": {"gold": 0, "iron": 28}},
             "highGoldArea": {"width": 3, "height": 3, "min": 12, "max": 18, "spawnPercent": 35},

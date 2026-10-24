@@ -16,8 +16,8 @@ class BuildBase(State):
     Routes use eight directions and the default three-turn obstacle cost.
     The manager supplies remembered terrain; never-seen targets are approached
     until revealed. Unseen enemy claims can still cause a build to fail.
-    With center_only=True, choose the center site whose nearest friendly base
-    is farthest away (Euclidean distance); every fallback stays in the center.
+    With center_only=True, maximize newly claimed center tiles within Manhattan
+    distance two, then spread bases apart; every fallback stays in the center.
     """
 
     def __init__(self, grid: CoordinateGrid | GameMap | MapState, obstacle_cost: int = 3):
@@ -27,6 +27,7 @@ class BuildBase(State):
         self.obstacle_cost = obstacle_cost
         self._reserved_sites: dict[str, tuple[int, int]] = {}
         self._remaining_iron = 0
+        self._ore_searches = {}
 
     def update(self, view: MarsView, team_id: str) -> None:
         super().update(view, team_id)
@@ -45,6 +46,7 @@ class BuildBase(State):
         bot.build_site = None
         bot.build_requested = False
         bot.build_in_center = center_only
+        self._ore_searches.pop(bot.id, None)
         bot.set_state("BuildBase")
 
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
@@ -67,13 +69,7 @@ class BuildBase(State):
             return None, {"type": "pass"}
 
         if self._remaining_iron < 6:
-            # Keep the build assignment and target so we resume after banking.
-            # The whole-map instance finds the nearest ore of either resource.
-            ore_state = self.states.get("FindAnyOreState")
-            if ore_state is None:
-                return None, {"type": "pass"}
-            result = ore_state.next_action(bot)
-            return result if isinstance(result, tuple) else (None, result)
+            return self._find_ore_near_target(bot, worker)
 
         origin = bot.coordinates
         target = (bot.build_target["x"], bot.build_target["y"])
@@ -105,14 +101,27 @@ class BuildBase(State):
                 return None, {"type": "pass"}
 
             friendly = [point for point, base in bases.items() if base["teamId"] == self.team_id]
+            center_tiles = {
+                (x, y) for y in range(top, top + height) for x in range(left, left + width)
+                if self._cell({"x": x, "y": y})["type"] != "void"
+            }
+            claimed = {
+                point for point in center_tiles
+                if any(abs(point[0] - x) + abs(point[1] - y) <= 2 for x, y in friendly + list(reserved))
+            }
 
             def spacing(point):
+                newly_claimed = sum(
+                    (point[0] + dx, point[1] + dy) in center_tiles
+                    and (point[0] + dx, point[1] + dy) not in claimed
+                    for dy in range(-2, 3) for dx in range(-2, 3) if abs(dx) + abs(dy) <= 2
+                )
                 separations = [(point[0] - x) ** 2 + (point[1] - y) ** 2 for x, y in friendly]
-                # Without any base, start at an edge to leave room for others.
+                # For equal coverage, spread bases while keeping their claims inside.
                 edge_distance = (2 * point[0] - (2 * left + width - 1)) ** 2 + (
                     2 * point[1] - (2 * top + height - 1)
                 ) ** 2
-                return (min(separations, default=edge_distance), sum(separations),
+                return (newly_claimed, min(separations, default=edge_distance), sum(separations),
                         -distances[point], -point[1], -point[0])
 
             target = max(sites, key=spacing)
@@ -159,4 +168,65 @@ class BuildBase(State):
         self._remaining_iron -= 6
         bot.build_requested = True
         return None, {"type": "build-base"}
+
+    def _find_ore_near_target(self, bot: Bot, worker) -> tuple[Coordinate | None, Action]:
+        """Search around this bot's base destination, preserving its build task."""
+        template = self.states.get("FindAnyOreState")
+        if template is None:
+            return None, {"type": "pass"}
+        target = bot.build_site or bot.build_target
+        left, top = max(0, target["x"] - 2), max(0, target["y"] - 2)
+        right = min(self.grid["width"], target["x"] + 3)
+        bottom = min(self.grid["height"], target["y"] + 3)
+        if bot.build_in_center:
+            rich = self.view["highGoldArea"]
+            width = min(self.grid["width"], rich["width"])
+            height = min(self.grid["height"], rich["height"])
+            center_left = (self.grid["width"] - width) // 2
+            center_top = (self.grid["height"] - height) // 2
+            left, top = max(left, center_left), max(top, center_top)
+            right, bottom = min(right, center_left + width), min(bottom, center_top + height)
+        if left >= right or top >= bottom:
+            return None, {"type": "pass"}
+
+        # Separate instances keep one bot's search bounds out of other tasks.
+        bounds = (left, top, right, bottom)
+        cached = self._ore_searches.get(bot.id)
+        if cached is None or cached[0] != bounds or type(cached[1]) is not type(template):
+            area = {"x": left, "y": top, "width": right - left, "height": bottom - top}
+            source = self.map_state if self.map_state is not None else self.view
+            cached = (bounds, type(template)(source, area))
+            self._ore_searches[bot.id] = cached
+        ore_state = cached[1]
+        # Detach last turn's shared cache before update clears it.
+        ore_state._route_cache = {}
+        ore_state.update(self.view, self.team_id)
+        ore_state.states = self.states
+        ore_state._route_cache = self._route_cache
+
+        inventory = worker.get("inventory", {"gold": 0, "iron": 0})
+        carried = inventory["gold"] + inventory["iron"]
+        banking = carried >= worker.get("inventoryCapacity", 8) or (carried > 0 and any(
+            base["teamId"] == self.team_id
+            and (base["position"]["x"], base["position"]["y"]) == bot.coordinates
+            for base in self.view["bases"]
+        ))
+        x, y = bot.coordinates
+        if not banking and not (left <= x < right and top <= y < bottom):
+            # Reach the assigned area even when its ore is not visible yet.
+            enemy_bases = {
+                (base["position"]["x"], base["position"]["y"])
+                for base in self.view["bases"] if base["teamId"] != self.team_id
+            }
+            distances, previous = self._routes(bot.coordinates, enemy_bases, allow_hidden=True)
+            candidates = [point for point in distances if left <= point[0] < right and top <= point[1] < bottom]
+            if not candidates:
+                return None, {"type": "pass"}
+            destination = min(candidates, key=lambda point: (
+                abs(point[0] - target["x"]) + abs(point[1] - target["y"]), distances[point], point
+            ))
+            return self._move(bot.coordinates, destination, previous)
+
+        result = ore_state.next_action(bot)
+        return result if isinstance(result, tuple) else (None, result)
 

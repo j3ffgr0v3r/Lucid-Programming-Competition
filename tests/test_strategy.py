@@ -37,8 +37,8 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         actions = manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["center"].state, "BuildBase")
-        self.assertEqual(actions["center"], {"type": "move", "direction": "south-east"})
-        self.assertEqual(manager.bots["center"].build_target, {"x": 5, "y": 5})
+        self.assertEqual(actions["center"], {"type": "build-base"})
+        self.assertEqual(manager.bots["center"].build_target, {"x": 4, "y": 4})
         self.assertEqual(manager.bots["north"].state, "FindIronState")
         self.assertEqual(manager.bots["south"].state, "FindIronState")
         north = manager.search_areas[manager.bots["north"].search_area_index]
@@ -57,8 +57,6 @@ class StrategyTests(unittest.TestCase):
         self.assertEqual(manager.bots["center"].state, "BuildBase")
         self.assertEqual(manager.bots["center"].build_target, {"x": 4, "y": 4})
         self.view["teamResources"]["ours"]["iron"] = 6
-        self.assertEqual(manager.calculate_actions(self.snapshot)["center"], {"type": "move", "direction": "south-east"})
-        self.view["units"][0]["position"] = {"x": 5, "y": 5}
         self.assertEqual(manager.calculate_actions(self.snapshot)["center"], {"type": "build-base"})
 
     def test_after_three_friendly_bases_everyone_searches_any_ore(self):
@@ -66,11 +64,29 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
         self.assertTrue(all(bot.state == "FindAnyOreState" for bot in manager.bots.values()))
+        self.assertTrue(all(bot.search_area_index == manager.center_area_index for bot in manager.bots.values()))
         hidden = deepcopy(self.snapshot)
         hidden["view"]["bases"] = []
         manager.calculate_actions(hidden)
         self.assertEqual(len(manager.map_state.bases), 3)
         self.assertTrue(all(bot.state == "FindAnyOreState" for bot in manager.bots.values()))
+
+    def test_three_bases_redirect_ore_search_to_center_plus_three_tile_buffer(self):
+        self.view["map"] = {"width": 20, "height": 20, "cells": [{"type": "empty"} for _ in range(400)]}
+        self.view["highGoldArea"].update(width=4, height=4)
+        self.view["bases"].extend([self.base("second", 8, 9), self.base("third", 11, 10)])
+        self.view["map"]["cells"][1] = {"type": "gold", "amount": 5}
+        self.view["map"]["cells"][9 * 20 + 9] = {"type": "gold", "amount": 5}
+        manager = Manager(self.snapshot, self.identity)
+        actions = manager.calculate_actions(self.snapshot)
+        self.assertEqual(manager.center_search_area, {"x": 5, "y": 5, "width": 10, "height": 10})
+        self.assertEqual(actions["north"], {"type": "move", "direction": "south-east"})
+        self.assertTrue(all(bot.search_area_index == manager.center_area_index for bot in manager.bots.values()))
+
+    def test_center_buffer_is_clipped_to_the_map(self):
+        self.view["highGoldArea"].update(width=8, height=8)
+        manager = Manager(self.snapshot, self.identity)
+        self.assertEqual(manager.center_search_area, {"x": 0, "y": 0, "width": 9, "height": 9})
 
     def test_enemy_bases_do_not_count_and_builder_can_change(self):
         self.view["bases"].extend([self.base("enemy-1", 8, 0, "enemy"), self.base("enemy-2", 8, 1, "enemy")])

@@ -7,6 +7,7 @@ class Bot:
         self.name: str = name
         self.id: str = id
         self.state: State | None = None
+        self.coordinates: tuple[int, int] = coordinates
         
     def set_state(self, state: State) -> None:
         self.state = state
@@ -16,3 +17,6 @@ class Bot:
             return (None, SimpleAction(type="pass"))
         
         return self.state.next_action(self)
+        
+    def update_coordinates(self, new_coordinates: tuple[int, int]) -> None:
+        self.coordinates = new_coordinates

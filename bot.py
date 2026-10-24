@@ -20,6 +20,10 @@ class Bot:
         self.build_in_center = False
         # None uses the whole-map ore state; miners get opposing regions.
         self.search_area_index: int | None = None
+        self.ore_search_scope: tuple | None = None
+        self.ore_target: tuple[int, int] | None = None
+        self.ore_explore_target: tuple[int, int] | None = None
+        self.ore_returning = False
         
     def set_state(self, state: str | None) -> None:
         self.state = state

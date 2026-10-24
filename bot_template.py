@@ -5,6 +5,7 @@ import os
 from heapq import heappop, heappush
 from collections.abc import Sequence
 from typing import Optional
+from manager import Manager
 from bot_client import (
     ActionsByEntity,
     BaseLocation,
@@ -32,33 +33,17 @@ def calculate_actions(gameState: BotState, identity: Identity) -> ActionsByEntit
     if view is None:
         return {}
 
-    # Strategy goes here.
+    # Create manager
+    if 'manger' not in globals():
+        global manager
+        manager = Manager(gameState, identity)
 
-    return {
-        worker["unitId"]: {"type": "pass"}
-        for worker in view["units"]
-        if worker["teamId"] == identity["teamId"]
-    }
+    return manager.calculate_actions(gameState)
 
 
 # Game helpers. Feel free to use, discard, or modify.
 # Fill in the strategy section above.
-
-def _is_integer(value: object) -> bool:
-    return isinstance(value, int) and not isinstance(value, bool)
-
-
-def _cell(grid: CoordinateGrid | GameMap, point: Coordinate):
-    x, y = point["x"], point["y"]
-    if not _is_integer(x) or not _is_integer(y):
-        return None
-    if not (0 <= x < grid["width"] and 0 <= y < grid["height"]):
-        return None
-
-    row_start = y * grid["width"]
-    return grid["cells"][row_start + x]
-
-
+    return grid["cells"][row_start + x] 
 def is_claimed(state: TerritoryState | MarsView, coordinate: Coordinate) -> list[str]:
     """Return all known claiming teams, including overlapping claims."""
     teams: list[str] = []

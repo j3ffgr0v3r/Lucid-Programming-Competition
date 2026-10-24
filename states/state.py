@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from bot_client import Action, Coordinate, MarsView, GameMap
+from bot_client import Action, MarsView, GameMap
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -15,6 +15,6 @@ class State(ABC):
         self.grid: GameMap = view["map"]
 
     @abstractmethod
-    def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
+    def next_action(self, bot: Bot) -> Action:
         """Return a destination tile for moves, or ``None`` for other actions."""
         raise NotImplementedError

@@ -7,6 +7,8 @@ from bot_client import Action, MarsView, Resource
 from map_state import MapState
 from states.state import State
 
+ORE_RECHECK_TURNS = 12
+
 
 class SearchArea(TypedDict):
     """Rectangular search area, with a top-left coordinate and dimensions."""
@@ -133,6 +135,15 @@ class FindOreState(State):
             if point != bot.coordinates and self._inside(point, bounds)
             and self._cell({"x": point[0], "y": point[1]})["type"] == "hidden"
         }
+        # Explored terrain can receive new ore while outside our vision.
+        # Revisit old observations only after exhausting unexplored tiles.
+        if not unseen and self.map_state is not None:
+            unseen = {
+                point for point in distances
+                if point != bot.coordinates and self._inside(point, bounds)
+                and 0 <= self.map_state.last_seen[point[1] * self.grid["width"] + point[0]]
+                <= self.view["turn"] - ORE_RECHECK_TURNS
+            }
         if bot.ore_explore_target not in unseen:
             bot.ore_explore_target = min(
                 unseen, key=lambda point: (distances[point], point[1], point[0]), default=None
@@ -140,7 +151,7 @@ class FindOreState(State):
         if bot.ore_explore_target is not None:
             return self._move(bot.coordinates, bot.ore_explore_target, previous)[1]
 
-        # With no unseen tiles or eligible ore, enter the assigned region once
+        # With no unseen or stale tiles or eligible ore, enter the assigned region once
         # and wait for new information. Never pick an adjacent empty tile just
         # because the path to the current tile is empty.
         if bounds is None:

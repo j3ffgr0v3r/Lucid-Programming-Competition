@@ -29,7 +29,7 @@ class TradeTests(unittest.TestCase):
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "trade", "from": "iron"})
         self.assertEqual(manager.bots["worker"].state, "Trade")
         self.view["turn"] = 479
-        self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "trade")
+        self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "deposit")
 
     def test_cutoff_uses_match_length_and_configurable_constant(self):
         self.snapshot["match"]["maxTurns"] = 300

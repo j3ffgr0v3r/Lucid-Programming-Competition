@@ -22,6 +22,10 @@ class MapState:
             "cells": deepcopy(list(game_map["cells"])),
         }
         self.bases: list[Base] = deepcopy(list(view["bases"]))
+        self.last_seen = [
+            view["turn"] if cell["type"] != "hidden" else -1
+            for cell in game_map["cells"]
+        ]
         self.highGoldArea: HighGoldSettings = cast(
             HighGoldSettings, dict(view["highGoldArea"])
         )
@@ -42,6 +46,7 @@ class MapState:
         for index, updated_cell in enumerate(updated_cells):
             if updated_cell["type"] == "hidden":
                 continue
+            self.last_seen[index] = view["turn"]
             if cells[index] != updated_cell:
                 cells[index] = deepcopy(updated_cell)
 

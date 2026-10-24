@@ -4,6 +4,8 @@ from bot import Bot
 from bot_client import Action
 from .state import State
 
+BANK_TURN_BUFFER = 2
+
 
 class Trade(State):
     def next_action(self, bot: Bot) -> Action:
@@ -13,12 +15,27 @@ class Trade(State):
         if worker is None or worker["readyOnTurn"] > self.view["turn"]:
             return {"type": "pass"}
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
+        carried = inventory["gold"] + inventory["iron"]
+        bank = self.states.get("Bank")
+        if carried and self.turns_left is not None and bank is not None:
+            bank_turns = bank.turns_to_bank(bot)
+            if bank_turns is not None and self.turns_left <= bank_turns + inventory["iron"] // 3 + BANK_TURN_BUFFER:
+                # Carried gold does not score: leave enough time to deposit it.
+                bot.ore_returning = True
+                return self._delegate("Bank", bot)
         if inventory["iron"] >= 3:
             # Trades use inventory, not shared bank iron, and consume one turn.
             return {"type": "trade", "from": "iron"}
 
-        # One or two remaining iron cannot be traded. Deposit it with the gold.
-        next_state = "Bank" if inventory["gold"] or inventory["iron"] else "CenterOre"
+        # Gather enough iron to trade before returning, unless carrying gold,
+        # full, or already committed to banking a depleted deposit.
+        next_state = "Bank" if (
+            inventory["gold"] or carried >= worker.get("inventoryCapacity", 8)
+            or (carried and bot.ore_returning)
+        ) else "CenterOre"
+        return self._delegate(next_state, bot)
+
+    def _delegate(self, next_state: str, bot: Bot) -> Action:
         state = self.states.get(next_state)
         if state is None:
             return {"type": "pass"}

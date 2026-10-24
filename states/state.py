@@ -35,6 +35,7 @@ class State(ABC):
         self.view: MarsView | None = source if "map" in source else None
         self.grid = self.view["map"] if self.view is not None else source
         self.team_id: str | None = None
+        self.turns_left: int | None = None
         self.states: dict[str, State] = {}
         self.obstacle_cost = 3
         self._route_cache = {}

@@ -203,6 +203,7 @@ class Manager:
         route_cache = {}
         for state in self._all_states:
             state.update(planning_view, self.team_id)
+            state.turns_left = max(0, self.max_turns - self.turn)
             # All states use the same remembered map this turn.
             state._route_cache = route_cache
 

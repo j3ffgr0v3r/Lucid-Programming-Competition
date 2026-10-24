@@ -19,6 +19,21 @@ OBSTACLE_COST = 3
 
 
 class Bank(State):
+    def turns_to_bank(self, bot: Bot) -> int | None:
+        """Estimate travel plus depositing, including terrain cooldowns."""
+        if self.view is None or bot.team_id is None:
+            return None
+        bases = self.map_state.bases if self.map_state is not None else self.view["bases"]
+        start = {"x": bot.coordinates[0], "y": bot.coordinates[1]}
+        costs = []
+        for base in bases:
+            if base["teamId"] != bot.team_id:
+                continue
+            path = self._path_through_hidden(self.grid, start, base["position"], bases, bot.team_id)
+            if path is not None:
+                costs.append(self._path_cost(self.grid, path, hidden_penalty=HIDDEN_TERRAIN_PENALTY) + 1)
+        return min(costs, default=None)
+
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
         team_id = bot.team_id
         if self.view is None or team_id is None:

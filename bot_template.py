@@ -29,13 +29,17 @@ API_BASE_URL = os.environ.get("LUCID_API_BASE_URL", "http://localhost:5173")
 
 
 def calculate_actions(gameState: BotState, identity: Identity) -> ActionsByEntity:
+    global manager
     view = mars_view(gameState)
     if view is None:
         return {}
 
-    # Create manager
-    if 'manager' not in globals():
-        global manager
+    # Keep progress within a match, but discard it when the client joins another.
+    if (
+        globals().get("manager") is None
+        or manager.match_id != gameState["match"]["matchId"]
+        or manager.team_id != identity["teamId"]
+    ):
         manager = Manager(gameState, identity)
 
     return manager.calculate_actions(gameState)

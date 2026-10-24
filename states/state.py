@@ -9,7 +9,8 @@ from bot_client import (
     Action,
     Coordinate,
     CoordinateGrid,
-    GameMap
+    GameMap,
+    MarsView,
 )
 
 class State(ABC):
@@ -21,6 +22,14 @@ class State(ABC):
 
     def __init__(self, grid: CoordinateGrid | GameMap):
         self.grid = grid
+        self.view: MarsView | None = None
+        self.team_id: str | None = None
+
+    def update(self, view: MarsView, team_id: str) -> None:
+        """Refresh shared world data before any bot requests an action."""
+        self.grid = view["map"]
+        self.view = view
+        self.team_id = team_id
 
 
     @abstractmethod

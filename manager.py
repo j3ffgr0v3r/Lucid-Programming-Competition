@@ -67,9 +67,10 @@ class Manager:
         # Assign one ready builder so bots do not all spend the same iron.
         if self.bank["iron"] >= self.next_bot_cost:
             for unit_id, bot in self.bots.items():
-                if self.workers[unit_id]["readyOnTurn"] <= self.turn:
+                if bot.state is None and self.workers[unit_id]["readyOnTurn"] <= self.turn:
                     bot.set_state("SpawnBot")
                     break
+        
 
     def calculate_actions(self, game_state: BotState) -> ActionsByEntity:
         """Refresh bots, assign their states, then collect their actions."""
@@ -104,7 +105,7 @@ class Manager:
                 self.bots[unit_id].update_coordinates(coordinates)
 
         for state in self.states.values():
-            state.grid = self.game_map
+            state.update(view, self.team_id)
 
         self.strategize()
 

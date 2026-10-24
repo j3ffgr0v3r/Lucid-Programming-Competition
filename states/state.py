@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from heapq import heappop, heappush
 from typing import TYPE_CHECKING
+from map_state import MapState
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -22,8 +23,15 @@ class State(ABC):
     turn. Keep per-bot progress on the bot, since state instances are shared.
     """
 
-    def __init__(self, source: CoordinateGrid | GameMap | MarsView):
-        # Older movement states supply a grid; ore states supply a full view.
+    def __init__(self, source: CoordinateGrid | GameMap | MarsView | MapState):
+        # Keep persistent map memory separate from the live per-turn snapshot.
+        self.map_state = source if isinstance(source, MapState) else None
+        if self.map_state is not None:
+            source = MarsView(
+                turn=0, map=self.map_state.map, bases=self.map_state.bases,
+                highGoldArea=self.map_state.highGoldArea, units=[], scores={},
+                teamResources={}, warnings=[], info=[], effects=[],
+            )
         self.view: MarsView | None = source if "map" in source else None
         self.grid = self.view["map"] if self.view is not None else source
         self.team_id: str | None = None

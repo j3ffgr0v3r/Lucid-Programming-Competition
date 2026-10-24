@@ -75,7 +75,7 @@ class Manager:
             (half_x, half_y, width - half_x, height - half_y),
         )]
         self.states: dict[str, State] = {
-            name: state_class(self.map_state, whole_map) if name in ore_names else state_class(self.game_map)
+            name: state_class(self.map_state, whole_map) if name in ore_names else state_class(self.map_state)
             for name, state_class in state_classes.items()
         }
         # SearchArea is constructor data, so cache one instance per region.

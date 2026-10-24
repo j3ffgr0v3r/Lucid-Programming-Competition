@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from bot import Bot
+from map_state import MapState
 from bot_client import Action, Coordinate, CoordinateGrid, Direction, GameMap, MarsView
 from .state import State
 
@@ -17,7 +18,7 @@ class BuildBase(State):
     until revealed. Unseen enemy claims can still cause a build to fail.
     """
 
-    def __init__(self, grid: CoordinateGrid | GameMap, obstacle_cost: int = 3):
+    def __init__(self, grid: CoordinateGrid | GameMap | MapState, obstacle_cost: int = 3):
         super().__init__(grid)
         if not self._is_integer(obstacle_cost) or obstacle_cost < 1:
             raise ValueError("obstacle_cost must be a positive integer.")

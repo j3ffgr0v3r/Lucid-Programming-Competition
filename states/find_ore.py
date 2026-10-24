@@ -35,14 +35,6 @@ class FindOreState(State):
     ) -> None:
         if resource is not None and resource not in ("iron", "gold"):
             raise ValueError(f"Unsupported ore resource: {resource}")
-        # Manager supplies persistent map memory; direct callers may use a view.
-        self.map_state = view if isinstance(view, MapState) else None
-        if self.map_state is not None:
-            view = MarsView(
-                turn=0, map=self.map_state.map, bases=self.map_state.bases,
-                highGoldArea=self.map_state.highGoldArea, units=[], scores={},
-                teamResources={}, warnings=[], info=[], effects=[],
-            )
         super().__init__(view)
         self.resource = resource
         self.area = area
@@ -59,6 +51,10 @@ class FindOreState(State):
             if carried and any(base["position"] == start for base in home_bases):
                 return SimpleAction(type="deposit")
             if carried >= worker.get("inventoryCapacity", 8):
+                bank_state = self.states.get("Bank")
+                if bank_state is not None:
+                    result = bank_state.next_action(bot)
+                    return result[1] if isinstance(result, tuple) else result
                 routes = [self._path_to(start, base["position"], bot.team_id) for base in home_bases]
                 reachable = [route for route in routes if route is not None]
                 if reachable:

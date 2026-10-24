@@ -43,22 +43,7 @@ def calculate_actions(gameState: BotState, identity: Identity) -> ActionsByEntit
 
 # Game helpers. Feel free to use, discard, or modify.
 # Fill in the strategy section above.
-
-def _is_integer(value: object) -> bool:
-    return isinstance(value, int) and not isinstance(value, bool)
-
-
-def _cell(grid: CoordinateGrid | GameMap, point: Coordinate):
-    x, y = point["x"], point["y"]
-    if not _is_integer(x) or not _is_integer(y):
-        return None
-    if not (0 <= x < grid["width"] and 0 <= y < grid["height"]):
-        return None
-
-    row_start = y * grid["width"]
-    return grid["cells"][row_start + x]
-
-
+    return grid["cells"][row_start + x] 
 def is_claimed(state: TerritoryState | MarsView, coordinate: Coordinate) -> list[str]:
     """Return all known claiming teams, including overlapping claims."""
     teams: list[str] = []

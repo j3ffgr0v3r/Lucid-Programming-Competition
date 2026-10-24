@@ -40,6 +40,7 @@ class State(ABC):
         self.obstacle_cost = 3
         self._route_cache = {}
         self.ore_reservations: dict[tuple[int, int], dict[str, int]] = {}
+        self.route_avoidance: dict[tuple[int, int], frozenset[tuple[int, int]]] = {}
 
     def update(self, view: MarsView, team_id: str) -> None:
         """Refresh shared world data before any bot requests an action."""
@@ -49,6 +50,7 @@ class State(ABC):
         self._route_cache.clear()
         # Replace rather than clear: other states may still share the old dict.
         self.ore_reservations = {}
+        self.route_avoidance = {}
 
 
     @abstractmethod
@@ -71,17 +73,19 @@ class State(ABC):
     def _is_integer(self, value: object) -> bool:
         return isinstance(value, int) and not isinstance(value, bool)
 
-    def _routes(self, origin, enemy_bases, *, allow_hidden=False, allowed_cells=None):
+    def _routes(self, origin, enemy_bases, *, allow_hidden=False, allowed_cells=None, preferred_cells=None):
         """Dijkstra distances in turns, including entry cooldowns."""
-        key = (origin, frozenset(enemy_bases), self.obstacle_cost, allow_hidden, allowed_cells)
+        blocked = frozenset(enemy_bases) | self.route_avoidance.get(origin, frozenset())
+        key = (origin, blocked, self.obstacle_cost, allow_hidden, allowed_cells, preferred_cells)
         if key in self._route_cache:
             return self._route_cache[key]
         distances = {origin: 0}
+        deviations = {origin: 0}
         previous = {}
-        queue = [(0, origin)]
+        queue = [(0, 0, origin)]
         while queue:
-            cost, point = heappop(queue)
-            if cost != distances[point]:
+            cost, deviation, point = heappop(queue)
+            if (cost, deviation) != (distances[point], deviations[point]):
                 continue
             for dy in (-1, 0, 1):
                 for dx in (-1, 0, 1):
@@ -91,17 +95,19 @@ class State(ABC):
                     if allowed_cells is not None and neighbor not in allowed_cells:
                         continue
                     cell = self._cell({"x": neighbor[0], "y": neighbor[1]})
-                    if cell is None or cell["type"] == "void" or neighbor in enemy_bases:
+                    if cell is None or cell["type"] == "void" or neighbor in blocked:
                         continue
                     if cell["type"] == "hidden" and not allow_hidden:
                         continue
                     # Exploration estimates unknown terrain conservatively.
                     step_cost = self.obstacle_cost if cell["type"] in ("mountain", "crater", "hidden") else 1
                     candidate = cost + step_cost
-                    if candidate < distances.get(neighbor, float("inf")):
+                    candidate_deviation = deviation + int(preferred_cells is not None and neighbor not in preferred_cells)
+                    if (candidate, candidate_deviation) < (distances.get(neighbor, float("inf")), deviations.get(neighbor, 0)):
                         distances[neighbor] = candidate
+                        deviations[neighbor] = candidate_deviation
                         previous[neighbor] = point
-                        heappush(queue, (candidate, neighbor))
+                        heappush(queue, (candidate, candidate_deviation, neighbor))
         self._route_cache[key] = (distances, previous)
         return self._route_cache[key]
 

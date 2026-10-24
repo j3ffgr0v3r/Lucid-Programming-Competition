@@ -3,7 +3,8 @@
 from .find_ore import FindOreState
 
 
-PERIMETER_WIDTH = 3
+PATROL_WALL_DISTANCE = 2
+PERIMETER_WIDTH = PATROL_WALL_DISTANCE + 1
 PATROL_ORE_RADIUS = 4
 
 
@@ -12,8 +13,8 @@ class PatrolOre(FindOreState):
         super().__init__(source, None)
         width, height = self.grid["width"], self.grid["height"]
         # Stay near the edge while seeing tiles on both sides of the route.
-        inset_x = min(PERIMETER_WIDTH - 1, (width - 1) // 2)
-        inset_y = min(PERIMETER_WIDTH - 1, (height - 1) // 2)
+        inset_x = min(PATROL_WALL_DISTANCE, (width - 1) // 2)
+        inset_y = min(PATROL_WALL_DISTANCE, (height - 1) // 2)
         left, right = inset_x, width - 1 - inset_x
         top, bottom = inset_y, height - 1 - inset_y
         mid_x, mid_y = (left + right) // 2, (top + bottom) // 2
@@ -21,6 +22,10 @@ class PatrolOre(FindOreState):
             (left, top), (mid_x, top), (right, top), (right, mid_y),
             (right, bottom), (mid_x, bottom), (left, bottom), (left, mid_y),
         ]))
+        self.patrol_lane = frozenset(
+            (x, y) for y in range(top, bottom + 1) for x in range(left, right + 1)
+            if x in (left, right) or y in (top, bottom)
+        )
         self.perimeter = frozenset(
             (x, y) for y in range(height) for x in range(width)
             if min(x, y, width - 1 - x, height - 1 - y) < PERIMETER_WIDTH
@@ -45,13 +50,14 @@ class PatrolOre(FindOreState):
             or max(abs(point[0] - bot.coordinates[0]), abs(point[1] - bot.coordinates[1])) <= PATROL_ORE_RADIUS
         )
 
-    def _routes(self, origin, enemy_bases, *, allow_hidden=False, allowed_cells=None):
+    def _routes(self, origin, enemy_bases, *, allow_hidden=False, allowed_cells=None, preferred_cells=None):
         # Keep a rover on the ring, or within its current detour depth until
         # it rejoins. An interior starting position can still reach the edge.
         band_width = max(PERIMETER_WIDTH, self._edge_depth(origin) + 1)
         return super()._routes(
             origin, enemy_bases, allow_hidden=allow_hidden,
             allowed_cells=self._band(band_width) if allowed_cells is None else allowed_cells,
+            preferred_cells=self.patrol_lane if preferred_cells is None else preferred_cells,
         )
 
     def _checkpoint_route(self, bot, waypoint, distances, previous):
@@ -70,7 +76,9 @@ class PatrolOre(FindOreState):
         }
         # Distinguish a genuinely unreachable checkpoint from one blocked only
         # by our patrol boundary. Do not advance the circuit prematurely.
-        full_distances, full_previous = super()._routes(bot.coordinates, enemy_bases, allow_hidden=True)
+        full_distances, full_previous = super()._routes(
+            bot.coordinates, enemy_bases, allow_hidden=True, preferred_cells=self.patrol_lane
+        )
         detour_target = nearest(full_distances)
         if detour_target is None or (target is not None and
             max(abs(target[0] - waypoint[0]), abs(target[1] - waypoint[1])) <=
@@ -83,7 +91,8 @@ class PatrolOre(FindOreState):
         max_width = (min(self.grid["width"], self.grid["height"]) + 1) // 2
         for width in range(start_width + 1, max_width):
             detour_distances, detour_previous = super()._routes(
-                bot.coordinates, enemy_bases, allow_hidden=True, allowed_cells=self._band(width)
+                bot.coordinates, enemy_bases, allow_hidden=True, allowed_cells=self._band(width),
+                preferred_cells=self.patrol_lane,
             )
             if detour_target in detour_distances:
                 return detour_target, detour_previous

@@ -26,6 +26,9 @@ class Bot:
         self.ore_returning = False
         self.patrol_index: int | None = None
         self.patrol_direction = 1
+        self.last_action_type: str | None = None
+        self.movement_history: list[tuple[int, int]] = [coordinates]
+        self.avoid_steps: dict[tuple[int, int], int] = {}
         
     def set_state(self, state: str | None) -> None:
         self.state = state

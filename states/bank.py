@@ -40,6 +40,13 @@ class Bank(State):
             return (None, SimpleAction(type="pass"))
 
         grid = self.grid
+        avoided = self.route_avoidance.get(bot.coordinates, frozenset())
+        if avoided:
+            # Replan around a confirmed movement loop without changing memory.
+            grid = dict(grid, cells=[
+                {"type": "void"} if (index % grid["width"], index // grid["width"]) in avoided else cell
+                for index, cell in enumerate(grid["cells"])
+            ])
         bases = self.map_state.bases if self.map_state is not None else self.view["bases"]
         start: Coordinate = {"x": bot.coordinates[0], "y": bot.coordinates[1]}
         friendly_bases = [

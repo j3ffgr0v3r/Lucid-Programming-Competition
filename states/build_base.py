@@ -228,6 +228,7 @@ class BuildBase(State):
         ore_state.states = self.states
         ore_state._route_cache = self._route_cache
         ore_state.ore_reservations = self.ore_reservations
+        ore_state.route_avoidance = self.route_avoidance
 
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
         carried = inventory["gold"] + inventory["iron"]

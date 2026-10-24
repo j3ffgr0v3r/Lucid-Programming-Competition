@@ -20,6 +20,7 @@ from states.trade import BANK_TURN_BUFFER
 TRADE_TURNS_LEFT = 100
 CENTER_SEARCH_BUFFER = 3
 CENTER_BOT_COUNT = 2
+LOOP_AVOID_TURNS = 4
 
 
 def bot_costs() -> Iterator[int]:
@@ -260,7 +261,21 @@ class Manager:
             if unit_id not in self.bots:
                 self.bots[unit_id] = Bot(name=unit_id, id=unit_id, team_id=self.team_id, coordinates=coordinates)
             else:
-                self.bots[unit_id].update_coordinates(coordinates)
+                bot = self.bots[unit_id]
+                if coordinates != bot.coordinates:
+                    if bot.last_action_type == "move":
+                        bot.movement_history = (bot.movement_history + [coordinates])[-5:]
+                    else:
+                        bot.movement_history = [coordinates]
+                elif bot.last_action_type not in ("move", "pass"):
+                    bot.movement_history = [coordinates]
+                history = bot.movement_history
+                if len(history) == 5 and history[0] == history[2] == history[4] and history[1] == history[3]:
+                    bot.avoid_steps[history[-2]] = self.turn + LOOP_AVOID_TURNS
+                    bot.movement_history = [coordinates]
+                bot.update_coordinates(coordinates)
+            bot = self.bots[unit_id]
+            bot.avoid_steps = {point: until for point, until in bot.avoid_steps.items() if until > self.turn}
 
         # Route over remembered terrain and bases, with fresh units and bank.
         planning_view = dict(view, map=self.game_map, bases=self.map_state.bases)
@@ -295,6 +310,11 @@ class Manager:
             if workers[unit_id]["readyOnTurn"] > self.turn or bot.state is None:
                 actions[unit_id] = {"type": "pass"}
             else:
+                # Recovery belongs to this rover, even when several workers
+                # share its tile. Route cache keys include the avoided steps.
+                avoidance = {bot.coordinates: frozenset(bot.avoid_steps)} if bot.avoid_steps else {}
+                for shared_state in self._all_states:
+                    shared_state.route_avoidance = avoidance
                 state = self.states[bot.state]
                 if bot.state in self.ore_states and bot.search_area_index is not None:
                     state = self.ore_states[bot.state][bot.search_area_index]
@@ -303,4 +323,5 @@ class Manager:
                 actions[unit_id] = self._mine_on_the_way(bot, workers[unit_id], action)
                 # Coordinates come from the next server snapshot, not the
                 # requested destination: movement may fail or be interrupted.
+            bot.last_action_type = actions[unit_id]["type"]
         return actions

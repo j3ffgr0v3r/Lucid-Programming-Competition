@@ -64,7 +64,8 @@ class BuildBase(State):
             ore_state = self.states.get("FindAnyOreState")
             if ore_state is None:
                 return None, {"type": "pass"}
-            return ore_state.next_action(bot)
+            result = ore_state.next_action(bot)
+            return result if isinstance(result, tuple) else (None, result)
 
         origin = bot.coordinates
         target = (bot.build_target["x"], bot.build_target["y"])

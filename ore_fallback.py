@@ -34,7 +34,9 @@ class _FindOre(State):
         super().__init__(map_state.map)
         self.map_state = map_state
         # Accept the teammate's SearchArea as well as the fallback dataclass.
-        self.search_area = SearchArea(search_area.x, search_area.y, search_area.width, search_area.height)
+        self.search_area = SearchArea(**search_area) if isinstance(search_area, dict) else SearchArea(
+            search_area.x, search_area.y, search_area.width, search_area.height
+        )
 
     def next_action(self, bot):
         if self.view is None:

@@ -50,6 +50,8 @@ class Manager:
                     state_class.__module__ == module.__name__
                     and issubclass(state_class, State)
                     and not isabstract(state_class)
+                    # This configurable base is represented by its ore wrappers.
+                    and name != "FindOreState"
                 ):
                     if name in state_classes:
                         raise ValueError(f"Duplicate state class name: {name}")
@@ -62,9 +64,9 @@ class Manager:
         search_area_class = getattr(ore_module, "SearchArea", ore_fallback.SearchArea)
         width, height = self.game_map["width"], self.game_map["height"]
         half_x, half_y = width // 2, height // 2
-        whole_map = search_area_class(0, 0, width, height)
+        whole_map = search_area_class(x=0, y=0, width=width, height=height)
         # Opposing pairs: north/south, east/west, NE/SW, NW/SE.
-        self.search_areas = [search_area_class(*bounds) for bounds in (
+        self.search_areas = [search_area_class(x=x, y=y, width=w, height=h) for x, y, w, h in (
             (0, 0, width, max(1, half_y)), (0, half_y, width, height - half_y),
             (half_x, 0, width - half_x, height), (0, 0, max(1, half_x), height),
             (half_x, 0, width - half_x, max(1, half_y)),
@@ -144,7 +146,7 @@ class Manager:
             position = worker["position"]
             coordinates = (position["x"], position["y"])
             if unit_id not in self.bots:
-                self.bots[unit_id] = Bot(name=unit_id, id=unit_id, coordinates=coordinates)
+                self.bots[unit_id] = Bot(name=unit_id, id=unit_id, team_id=self.team_id, coordinates=coordinates)
             else:
                 self.bots[unit_id].update_coordinates(coordinates)
 
@@ -166,7 +168,8 @@ class Manager:
                 state = self.states[bot.state]
                 if bot.state in self.ore_states and bot.search_area_index is not None:
                     state = self.ore_states[bot.state][bot.search_area_index]
-                _, action = state.next_action(bot)
+                result = state.next_action(bot)
+                action = result[1] if isinstance(result, tuple) else result
                 actions[unit_id] = action
                 # Coordinates come from the next server snapshot, not the
                 # requested destination: movement may fail or be interrupted.

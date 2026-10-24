@@ -42,9 +42,9 @@ class StrategyTests(unittest.TestCase):
         self.assertEqual(manager.bots["south"].state, "FindIronState")
         north = manager.search_areas[manager.bots["north"].search_area_index]
         south = manager.search_areas[manager.bots["south"].search_area_index]
-        self.assertEqual(north.y, 0)
-        self.assertEqual(north.height, south.y)
-        self.assertEqual(south.y + south.height, 9)
+        self.assertEqual(north["y"], 0)
+        self.assertEqual(north["height"], south["y"])
+        self.assertEqual(south["y"] + south["height"], 9)
 
     def test_builder_falls_back_to_nearest_any_ore_and_resumes_building(self):
         self.view["teamResources"]["ours"]["iron"] = 5

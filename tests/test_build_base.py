@@ -14,7 +14,7 @@ class BuildBaseTests(unittest.TestCase):
             "teamResources": {"ours": {"gold": 0, "iron": 20}},
             "highGoldArea": {"width": 3, "height": 3, "min": 12, "max": 18, "spawnPercent": 35},
         }
-        self.bot = Bot("Builder", "builder", (0, 2))
+        self.bot = Bot("Builder", "builder", "ours", (0, 2))
         self.state = BuildBase(self.grid)
 
     @staticmethod
@@ -128,7 +128,7 @@ class BuildBaseTests(unittest.TestCase):
         self.assertEqual(self.act()[1]["type"], "pass")
 
     def test_shared_state_keeps_independent_tasks_and_sites(self):
-        other = Bot("Other", "other", (1, 2))
+        other = Bot("Other", "other", "ours", (1, 2))
         self.view["units"].append(self.unit("other", 1, 2))
         target = {"x": 4, "y": 2}
         self.state.assign(self.bot, target)
@@ -141,7 +141,7 @@ class BuildBaseTests(unittest.TestCase):
         self.assertNotEqual(self.bot.build_site, other.build_site)
 
     def test_multiple_builders_do_not_spend_same_iron(self):
-        other = Bot("Other", "other", (6, 2))
+        other = Bot("Other", "other", "ours", (6, 2))
         self.view["units"].append(self.unit("other", 6, 2))
         self.view["teamResources"]["ours"]["iron"] = 6
         self.state.assign(self.bot, {"x": 0, "y": 2})

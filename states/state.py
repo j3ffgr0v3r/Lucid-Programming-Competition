@@ -22,9 +22,10 @@ class State(ABC):
     turn. Keep per-bot progress on the bot, since state instances are shared.
     """
 
-    def __init__(self, grid: CoordinateGrid | GameMap):
-        self.grid = grid
-        self.view: MarsView | None = None
+    def __init__(self, source: CoordinateGrid | GameMap | MarsView):
+        # Older movement states supply a grid; ore states supply a full view.
+        self.view: MarsView | None = source if "map" in source else None
+        self.grid = self.view["map"] if self.view is not None else source
         self.team_id: str | None = None
         self.states: dict[str, State] = {}
         self.obstacle_cost = 3
@@ -39,8 +40,8 @@ class State(ABC):
 
 
     @abstractmethod
-    def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
-        """Return a destination tile for moves, or ``None`` for other actions."""
+    def next_action(self, bot: Bot) -> Action | tuple[Coordinate | None, Action]:
+        """Return an action, optionally paired with a requested move destination."""
         raise NotImplementedError
 
 

@@ -258,6 +258,30 @@ class BuildBaseTests(unittest.TestCase):
         search = self.state._ore_searches[self.bot.id][1]
         self.assertEqual(search.area, {"x": 2, "y": 1, "width": 3, "height": 3})
 
+    def test_partial_load_keeps_banking_after_leaving_build_search_area(self):
+        self.view["teamResources"]["ours"]["iron"] = 5
+        self.base(0, 2)
+        self.bot.update_coordinates((3, 2))
+        self.worker.update(position={"x": 3, "y": 2}, inventory={"gold": 2, "iron": 0})
+        self.state.states["FindAnyOreState"] = FindAnyOreState(self.view)
+        self.state.assign(self.bot, {"x": 5, "y": 2})
+        deltas = {"west": (-1, 0), "north-west": (-1, -1), "south-west": (-1, 1)}
+        for _ in range(3):
+            action = self.act()[1]
+            self.assertEqual(action["type"], "move")
+            self.assertIn(action["direction"], deltas)
+            dx, dy = deltas[action["direction"]]
+            x, y = self.bot.coordinates
+            self.bot.update_coordinates((x + dx, y + dy))
+            self.worker["position"] = {"x": x + dx, "y": y + dy}
+            # New ore behind the returning builder must not reverse its trip.
+            self.grid["cells"][2 * 7 + 5] = {"type": "gold", "amount": 5}
+            self.view["turn"] += 1
+        self.assertEqual(self.act()[1], {"type": "deposit"})
+        self.assertEqual(self.bot.build_target, {"x": 5, "y": 2})
+        self.worker["inventory"] = {"gold": 0, "iron": 0}
+        self.assertEqual(self.act()[1]["type"], "move")
+
     def test_ore_search_instances_are_reused_and_independent_between_builders(self):
         self.view["teamResources"]["ours"]["iron"] = 5
         self.state.states["FindAnyOreState"] = FindAnyOreState(self.view)

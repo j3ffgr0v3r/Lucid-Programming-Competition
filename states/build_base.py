@@ -203,10 +203,11 @@ class BuildBase(State):
         ore_state.update(self.view, self.team_id)
         ore_state.states = self.states
         ore_state._route_cache = self._route_cache
+        ore_state.ore_reservations = self.ore_reservations
 
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
         carried = inventory["gold"] + inventory["iron"]
-        banking = carried >= worker.get("inventoryCapacity", 8) or (carried > 0 and any(
+        banking = carried >= worker.get("inventoryCapacity", 8) or (carried > 0 and bot.ore_returning) or (carried > 0 and any(
             base["teamId"] == self.team_id
             and (base["position"]["x"], base["position"]["y"]) == bot.coordinates
             for base in self.view["bases"]

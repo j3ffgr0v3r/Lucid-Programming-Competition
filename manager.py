@@ -39,6 +39,7 @@ class Manager:
         self.match_id = game_state["match"]["matchId"]
         self.max_turns = game_state["match"].get("maxTurns", 480)
         self.bots: dict[str, Bot] = {}
+        self._builder_id: str | None = None
         self._bot_costs = bot_costs()
         self._recruited_workers = 0
         self.next_bot_cost = next(self._bot_costs)
@@ -138,31 +139,40 @@ class Manager:
         builder = None
         available = [bot for bot in self.bots.values() if bot.id not in spawners]
         if len(our_bases) < 3 and available:
-            builder = min(
+            # Keep a builder through mining and banking trips even when another
+            # rover becomes closer to the center. Replace only when unavailable.
+            builder = next((bot for bot in available if bot.id == self._builder_id), None)
+            builder = builder or min(
                 available,
                 key=lambda bot: ((bot.coordinates[0] - center["x"]) ** 2
                                  + (bot.coordinates[1] - center["y"]) ** 2, bot.id),
             )
+            self._builder_id = builder.id
+        elif len(our_bases) >= 3:
+            self._builder_id = None
 
         ore_state_name = "FindIronState" if len(our_bases) < 3 else "FindAnyOreState"
-        miners = 0
+        region_counts = [0] * self.center_area_index
+        for bot in self.bots.values():
+            if bot is not builder and bot.id not in spawners and bot.search_area_index in range(self.center_area_index):
+                region_counts[bot.search_area_index] += 1
         for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
             if bot.id in spawners:
                 bot.set_state("SpawnBot")
-                bot.search_area_index = None
             elif bot is builder:
                 confirmed = bot.build_requested and any(
                     base["position"] == bot.build_site for base in our_bases
                 )
-                if bot.state != "BuildBase" or not bot.build_in_center or confirmed:
+                if bot.build_target is None or not bot.build_in_center or confirmed:
                     self.states["BuildBase"].assign(bot, center, center_only=True)
-                bot.search_area_index = None
+                bot.set_state("BuildBase")
             else:
                 bot.set_state(ore_state_name)
-                bot.search_area_index = (
-                    self.center_area_index if len(our_bases) >= 3 else miners % self.center_area_index
-                )
-                miners += 1
+                if len(our_bases) >= 3:
+                    bot.search_area_index = self.center_area_index
+                elif bot.search_area_index not in range(self.center_area_index):
+                    bot.search_area_index = min(range(self.center_area_index), key=lambda index: (region_counts[index], index))
+                    region_counts[bot.search_area_index] += 1
         
 
     def calculate_actions(self, game_state: BotState) -> ActionsByEntity:
@@ -201,17 +211,32 @@ class Manager:
         # Route over remembered terrain and bases, with fresh units and bank.
         planning_view = dict(view, map=self.game_map, bases=self.map_state.bases)
         route_cache = {}
+        ore_reservations = {}
         for state in self._all_states:
             state.update(planning_view, self.team_id)
             state.turns_left = max(0, self.max_turns - self.turn)
             # All states use the same remembered map this turn.
             state._route_cache = route_cache
+            state.ore_reservations = ore_reservations
 
         self.strategize()
 
         actions: ActionsByEntity = {}
-        # Construction spends bank iron in submission order: spawns go first.
-        ordered_bots = sorted(self.bots.items(), key=lambda item: (item[1].state != "SpawnBot", item[0]))
+        # Spawns spend first. Established miners reserve before incoming rovers,
+        # and rovers already traveling to ore reserve before choosing new targets.
+        def action_order(item):
+            unit_id, bot = item
+            x, y = bot.coordinates
+            cell = self.game_map["cells"][y * self.game_map["width"] + x]
+            on_ore = cell["type"] in ("iron", "gold") and cell.get("amount", 0) > 0
+            target_cell = (
+                self.game_map["cells"][bot.ore_target[1] * self.game_map["width"] + bot.ore_target[0]]
+                if bot.ore_target is not None else {}
+            )
+            has_target = target_cell.get("type") in ("iron", "gold") and target_cell.get("amount", 0) > 0
+            return (bot.state != "SpawnBot", not on_ore, not has_target, unit_id)
+
+        ordered_bots = sorted(self.bots.items(), key=action_order)
         for unit_id, bot in ordered_bots:
             if workers[unit_id]["readyOnTurn"] > self.turn or bot.state is None:
                 actions[unit_id] = {"type": "pass"}

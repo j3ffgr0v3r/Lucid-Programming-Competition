@@ -88,7 +88,7 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         self.assertEqual(manager.center_search_area, {"x": 0, "y": 0, "width": 9, "height": 9})
 
-    def test_enemy_bases_do_not_count_and_builder_can_change(self):
+    def test_builder_stays_assigned_until_unavailable_and_enemy_bases_do_not_count(self):
         self.view["bases"].extend([self.base("enemy-1", 8, 0, "enemy"), self.base("enemy-2", 8, 1, "enemy")])
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
@@ -96,8 +96,25 @@ class StrategyTests(unittest.TestCase):
         self.view["units"][0]["position"] = {"x": 0, "y": 0}
         self.view["units"][1]["position"] = {"x": 4, "y": 4}
         manager.calculate_actions(self.snapshot)
+        self.assertEqual(manager.bots["center"].state, "BuildBase")
+        self.assertEqual(manager.bots["north"].state, "FindIronState")
+        self.view["units"] = self.view["units"][1:]
+        manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["north"].state, "BuildBase")
-        self.assertEqual(manager.bots["center"].state, "FindIronState")
+
+    def test_existing_regions_survive_spawning_and_new_rover_ids(self):
+        self.view["teamResources"]["ours"]["iron"] = 0
+        manager = Manager(self.snapshot, self.identity)
+        manager.calculate_actions(self.snapshot)
+        original = {name: manager.bots[name].search_area_index for name in ("north", "south")}
+        self.view["teamResources"]["ours"]["iron"] = 11
+        self.assertEqual(manager.calculate_actions(self.snapshot)["north"]["type"], "spawn")
+        self.view["units"].append(self.worker("aaa-new", 0, 0))
+        self.view["teamResources"]["ours"]["iron"] = 0
+        manager.calculate_actions(self.snapshot)
+        for name, region in original.items():
+            self.assertEqual(manager.bots[name].search_area_index, region)
+        self.assertNotIn(manager.bots["aaa-new"].search_area_index, original.values())
 
     def test_confirmed_second_base_starts_next_build_without_resetting_pending_attempts(self):
         manager = Manager(self.snapshot, self.identity)

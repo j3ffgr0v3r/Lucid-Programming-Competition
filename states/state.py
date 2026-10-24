@@ -39,6 +39,7 @@ class State(ABC):
         self.states: dict[str, State] = {}
         self.obstacle_cost = 3
         self._route_cache = {}
+        self.ore_reservations: dict[tuple[int, int], dict[str, int]] = {}
 
     def update(self, view: MarsView, team_id: str) -> None:
         """Refresh shared world data before any bot requests an action."""
@@ -46,6 +47,8 @@ class State(ABC):
         self.view = view
         self.team_id = team_id
         self._route_cache.clear()
+        # Replace rather than clear: other states may still share the old dict.
+        self.ore_reservations = {}
 
 
     @abstractmethod

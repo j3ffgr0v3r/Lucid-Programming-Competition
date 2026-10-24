@@ -77,6 +77,34 @@ class TradeTests(unittest.TestCase):
         self.assertEqual(actions["worker"]["type"], "trade")
         self.assertEqual(actions["other"], {"type": "pass"})
 
+    def test_collects_full_gold_load_before_returning_and_depositing(self):
+        self.view["turn"] = 380
+        self.worker["position"] = {"x": 7, "y": 7}
+        self.worker["inventory"] = {"gold": 1, "iron": 0}
+        self.view["map"]["cells"][7 * 15 + 7] = {"type": "gold", "amount": 12}
+        manager = Manager(self.snapshot, self.identity)
+        for gold in range(1, 8):
+            self.worker["inventory"]["gold"] = gold
+            self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "mine"})
+            self.view["turn"] += 1
+        self.worker["inventory"]["gold"] = 8
+        self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "move")
+        self.assertTrue(manager.bots["worker"].ore_returning)
+        self.worker["position"] = {"x": 0, "y": 0}
+        self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "deposit"})
+        self.worker["inventory"]["gold"] = 0
+        self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "move")
+        self.assertFalse(manager.bots["worker"].ore_returning)
+
+    def test_partial_gold_returns_before_deadline_even_with_ore_underfoot(self):
+        self.view["turn"] = 470
+        self.worker["position"] = {"x": 7, "y": 7}
+        self.worker["inventory"] = {"gold": 1, "iron": 0}
+        self.view["map"]["cells"][7 * 15 + 7] = {"type": "gold", "amount": 12}
+        manager = Manager(self.snapshot, self.identity)
+        self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "move")
+        self.assertTrue(manager.bots["worker"].ore_returning)
+
 
 if __name__ == "__main__":
     unittest.main()

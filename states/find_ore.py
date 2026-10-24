@@ -84,6 +84,17 @@ class FindOreState(State):
             if not owners or bot.team_id in owners:
                 ores.add(point)
 
+        def available(point):
+            cell = self.grid["cells"][point[1] * self.grid["width"] + point[0]]
+            reserved = sum(
+                amount for unit_id, amount in self.ore_reservations.get(point, {}).items()
+                if unit_id != bot.id
+            )
+            return max(0, cell["amount"] - reserved)
+
+        # Reserve only the cargo room a miner can fill. Large deposits can
+        # support several rovers; small deposits should not draw the whole team.
+        ores = {point for point in ores if available(point) > 0}
         # Keep mining underfoot; do not break the mining streak for another target.
         if bot.coordinates in ores:
             bot.ore_target = bot.coordinates
@@ -92,6 +103,9 @@ class FindOreState(State):
                 ores, key=lambda point: (distances[point], point[1], point[0]), default=None
             )
         if bot.ore_target is not None:
+            self.ore_reservations.setdefault(bot.ore_target, {})[bot.id] = min(
+                capacity - carried, available(bot.ore_target)
+            )
             bot.ore_explore_target = None
             if bot.ore_target == bot.coordinates:
                 return {"type": "mine"}

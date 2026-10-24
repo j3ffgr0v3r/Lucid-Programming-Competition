@@ -27,15 +27,19 @@ class Trade(State):
             # Trades use inventory, not shared bank iron, and consume one turn.
             return {"type": "trade", "from": "iron"}
 
-        # Gather enough iron to trade before returning, unless carrying gold,
-        # full, or already committed to banking a depleted deposit.
+        # Collect a fuller load while time permits. CenterOre also deposits at
+        # home and returns partial loads when no eligible ore remains.
         next_state = "Bank" if (
-            inventory["gold"] or carried >= worker.get("inventoryCapacity", 8)
+            carried >= worker.get("inventoryCapacity", 8)
             or (carried and bot.ore_returning)
         ) else "CenterOre"
         return self._delegate(next_state, bot)
 
     def _delegate(self, next_state: str, bot: Bot) -> Action:
+        if next_state == "Bank":
+            bot.ore_returning = True
+            bot.ore_target = None
+            bot.ore_explore_target = None
         state = self.states.get(next_state)
         if state is None:
             return {"type": "pass"}

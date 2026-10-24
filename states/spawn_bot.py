@@ -1,5 +1,5 @@
 from bot_client import Action, Coordinate, SimpleAction
-from state import State
+from .state import State
 
 
 class SpawnBot(State):

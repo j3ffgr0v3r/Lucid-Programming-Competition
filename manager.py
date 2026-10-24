@@ -1,123 +1,120 @@
-"""Team-level planning and coordination of one Bot per friendly worker."""
+"""Team-level coordination of one Bot per friendly worker."""
 
 from __future__ import annotations
 
-from typing import Optional
+from collections.abc import Iterator
+from importlib import import_module
+from inspect import getmembers, isabstract, isclass
+from pkgutil import iter_modules
 
+import states
 from bot import Bot
-from bot_client import (
-    Action,
-    ActionsByEntity,
-    Base,
-    BotState,
-    GameMap,
-    Identity,
-    Inventory,
-    MarsView,
-    Unit,
-    mars_view,
-)
+from bot_client import ActionsByEntity, BotState, Identity, mars_view
+from states.state import State
+
+
+
+def bot_costs() -> Iterator[int]:
+    """Yield successive worker prices in banked iron: 5, 6, 11, 17, ..."""
+    current, following = 5, 6
+    while True:
+        yield current
+        current, following = following, current + following
 
 
 class Manager:
-    """Keep one instance per match so plans and bots persist between turns.
-
-    Construct with the first LPC game state and the client's identity, then
-    call calculate_actions(game_state) for each turn. Strategy and Bot hooks
-    are placeholders; this scaffold currently returns pass for every worker.
-    """
+    """Keep one manager per match; call calculate_actions each turn."""
 
     def __init__(self, game_state: BotState, identity: Identity) -> None:
-        self.team_id: str = identity["teamId"]
-        self.match_id: str = game_state["match"]["matchId"]
-
-        # Persistent decision-making state, separate from server snapshots.
-        self.bots: dict[str, Bot] = {}
-        self.strategy: Optional[str] = None
-
-        self.update_state(game_state)
-
-    def update_state(self, game_state: BotState) -> None:
-        """Refresh server data while preserving bot objects and strategy.
-
-        Enemy lists contain only currently visible entities. Map cells are
-        indexed by y * width + x; hidden cells are not known empty terrain.
-        Treat this snapshot as read-only, not as persistent map memory.
-        """
-        if game_state["match"]["matchId"] != self.match_id:
-            raise ValueError("Create a new Manager for each match.")
-
         view = mars_view(game_state)
         if view is None:
-            raise ValueError("Manager requires an LPC game state with a view.")
+            raise ValueError("Initialize Manager with an LPC game view.")
 
-        self.game_state: BotState = game_state
-        self.view: MarsView = view
-        self.turn: int = view["turn"]
-        self.max_turns: int = game_state["match"]["maxTurns"]
-        self.game_map: GameMap = view["map"]
-        self.bank: Inventory = view["teamResources"][self.team_id]
-        self.workers: dict[str, Unit] = {
+        self.team_id = identity["teamId"]
+        self.match_id = game_state["match"]["matchId"]
+        self.bots: dict[str, Bot] = {}
+        self._bot_costs = bot_costs()
+        self._recruited_workers = 0
+        self.next_bot_cost = next(self._bot_costs)
+        self.game_map = view["map"]
+
+        # State classes in states/*.py share the State(grid) constructor.
+        # Each manager owns one instance per class, keyed by class name.
+        self.states: dict[str, State] = {}
+        for module_info in iter_modules(states.__path__, states.__name__ + "."):
+            module = import_module(module_info.name)
+            for name, state_class in getmembers(module, isclass):
+                if (
+                    state_class.__module__ == module.__name__
+                    and issubclass(state_class, State)
+                    and not isabstract(state_class)
+                ):
+                    if name in self.states:
+                        raise ValueError(f"Duplicate state class name: {name}")
+                    self.states[name] = state_class(self.game_map)
+
+    def strategize(self):
+        """
+        Choose each bot's role with bot.set_state("StateClassName").
+        Use self.bank and self.next_bot_cost when planning recruitment.
+        Keep its existing state until a change of role is needed.
+        """
+        for bot in self.bots.values():
+            # Recruitment is a one-turn assignment; reassess affordability.
+            if bot.state == "SpawnBot":
+                bot.set_state(None)
+
+        # Assign one ready builder so bots do not all spend the same iron.
+        if self.bank["iron"] >= self.next_bot_cost:
+            for unit_id, bot in self.bots.items():
+                if self.workers[unit_id]["readyOnTurn"] <= self.turn:
+                    bot.set_state("SpawnBot")
+                    break
+
+    def calculate_actions(self, game_state: BotState) -> ActionsByEntity:
+        """Refresh bots, assign their states, then collect their actions."""
+        if game_state["match"]["matchId"] != self.match_id:
+            raise ValueError("Create a new Manager for each match.")
+        view = mars_view(game_state)
+        if view is None:
+            return {}
+
+        self.turn = view["turn"]
+        self.game_map = view["map"]
+        self.bank = view["teamResources"][self.team_id]
+        workers = self.workers = {
             worker["unitId"]: worker
             for worker in view["units"]
             if worker["teamId"] == self.team_id
         }
-        self.enemy_workers: dict[str, Unit] = {
-            worker["unitId"]: worker
-            for worker in view["units"]
-            if worker["teamId"] != self.team_id
-        }
-        self.bases: dict[str, Base] = {
-            base["baseId"]: base
-            for base in view["bases"]
-            if base["teamId"] == self.team_id
-        }
-        self.enemy_bases: dict[str, Base] = {
-            base["baseId"]: base
-            for base in view["bases"]
-            if base["teamId"] != self.team_id
-        }
 
-    def calculate_actions(self, game_state: BotState) -> ActionsByEntity:
-        """Run the manager's turn pipeline and return the client's payload."""
-        self.update_state(game_state)
-        self.sync_bots()
-        self.plan_strategy()
-        self.assign_bot_states()
-        return self.collect_actions()
+        # One starting worker is free. Advance only for confirmed recruits.
+        while self._recruited_workers < len(workers) - 1:
+            self.next_bot_cost = next(self._bot_costs)
+            self._recruited_workers += 1
 
-    def sync_bots(self) -> None:
-        """Create bots for new workers and refresh existing bots' snapshots."""
-        # TODO: Once Bot has an initializer, create one per worker ID in
-        # self.workers, preserving existing instances and their local state.
-        # Update their worker data and remove bots whose workers are gone.
-        pass
+        # Refresh every bot before any bot chooses an action.
+        self.bots = {unit_id: bot for unit_id, bot in self.bots.items() if unit_id in workers}
+        for unit_id, worker in workers.items():
+            position = worker["position"]
+            coordinates = (position["x"], position["y"])
+            if unit_id not in self.bots:
+                self.bots[unit_id] = Bot(name=unit_id, id=unit_id, coordinates=coordinates)
+            else:
+                self.bots[unit_id].update_coordinates(coordinates)
 
-    def plan_strategy(self) -> None:
-        """Choose team priorities using the bank, map, workers, and time left."""
-        # TODO: Decide when to explore, gather iron/gold, expand, or return
-        # cargo before the match ends. Record the plan in self.strategy.
-        pass
+        for state in self.states.values():
+            state.grid = self.game_map
 
-    def assign_bot_states(self) -> None:
-        """Translate the team plan into each bot's role and target."""
-        # TODO: Tell bots what to do (for example, mine gold or build a base).
-        # Coordinate targets and budget shared bank iron across builders;
-        # iron deposited this turn cannot fund construction this turn.
-        pass
+        self.strategize()
 
-    def collect_actions(self) -> ActionsByEntity:
-        """Ask each ready worker's bot for one action, keyed by worker ID."""
         actions: ActionsByEntity = {}
-        for unit_id, worker in self.workers.items():
-            if worker["readyOnTurn"] > self.turn:
+        for unit_id, bot in self.bots.items():
+            if workers[unit_id]["readyOnTurn"] > self.turn or bot.state is None:
                 actions[unit_id] = {"type": "pass"}
             else:
-                actions[unit_id] = self.get_bot_action(unit_id)
+                _, action = self.states[bot.state].next_action(bot)
+                actions[unit_id] = action
+                # Coordinates come from the next server snapshot, not the
+                # requested destination: movement may fail or be interrupted.
         return actions
-
-    def get_bot_action(self, unit_id: str) -> Action:
-        """Bot integration hook: obtain an action for a ready friendly worker."""
-        # TODO: Query self.bots[unit_id] once Bot's action method is defined.
-        # The bot should own movement/pathfinding and execution of its role.
-        return {"type": "pass"}

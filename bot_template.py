@@ -34,7 +34,7 @@ def calculate_actions(gameState: BotState, identity: Identity) -> ActionsByEntit
         return {}
 
     # Create manager
-    if 'manger' not in globals():
+    if 'manager' not in globals():
         global manager
         manager = Manager(gameState, identity)
 

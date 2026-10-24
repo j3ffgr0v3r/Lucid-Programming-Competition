@@ -1,6 +1,10 @@
-from abc import ABC, abstractmethod
+from __future__ import annotations
 
-from bot import Bot
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bot import Bot
 from bot_client import (
     Action,
     Coordinate,
@@ -9,7 +13,11 @@ from bot_client import (
 )
 
 class State(ABC):
-    """Interface for a bot state that selects its next action."""
+    """Shared behavior that selects an action for the supplied bot.
+
+    The manager creates each concrete state once and refreshes its grid each
+    turn. Keep per-bot progress on the bot, since state instances are shared.
+    """
 
     def __init__(self, grid: CoordinateGrid | GameMap):
         self.grid = grid

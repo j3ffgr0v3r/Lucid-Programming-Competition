@@ -1,2 +1,5044 @@
-{'actionRevisions': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-unit-1': 11}, 'match': {'teams': [{'id': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'displayName': '[BYU] Ctrl + Alt + Elite', 'botType': False}, {'id': 'bot-44817eaa-2c8e-48ba-96d0-b2a75dc52f0d', 'displayName': 'Bot 1', 'botType': 'prospector'}, {'id': 'bot-d9e4df95-b246-42fa-b717-9feac57bbaeb', 'displayName': 'Bot 2', 'botType': 'prospector'}, {'id': 'bot-2c7f144f-d9dc-4ab1-a876-a390b00fbaf3', 'displayName': 'Bot 3', 'botType': 'prospector'}], 'matchId': 'match-a83a3308-d0b0-455f-8ea3-4b0ca896c176', 'mode': 'practice', 'status': 'active', 'turnAdvanceMode': 'client-action', 'rulesVersion': 'lpc2026', 'turn': 11, 'maxTurns': 480, 'startedAtMs': 1792859393235, 'expectedTeamIds': ['team-1cb0d601-49ca-4e25-81c3-a13a737e2a48'], 'teamIds':['team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'bot-44817eaa-2c8e-48ba-96d0-b2a75dc52f0d', 'bot-d9e4df95-b246-42fa-b717-9feac57bbaeb', 'bot-2c7f144f-d9dc-4ab1-a876-a390b00fbaf3'], 'activeTeamIds': ['team-1cb0d601-49ca-4e25-81c3-a13a737e2a48']}, 'view': {'turn': 11, 'map': {'width': 50, 'height': 50, 'cells': [{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'gold', 'amount': 8}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'mountain'}, {'type': 'mountain'}, {'type': 'mountain'}, {'type': 'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'mountain'}, {'type': 'mountain'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'},{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'},{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'},{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'},{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'},{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'},{'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'mountain'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type':'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'mountain'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'empty'}, {'type': 'empty'}, {'type': 'empty'}, {'type':'crater', 'formation': {'x': 0, 'y': 0, 'size': 3}}, {'type': 'crater', 'formation': {'x': 1, 'y': 0, 'size': 3}}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'crater', 'formation': {'x': 0, 'y': 0, 'size': 2}}, {'type': 'crater', 'formation': {'x': 1, 'y': 0, 'size': 2}}, {'type': 'crater', 'formation': {'x': 0, 'y': 1, 'size': 3}}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'crater', 'formation': {'x': 1, 'y': 1, 'size': 2}}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type':'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}, {'type': 'hidden'}]}, 'highGoldArea': {'width': 16, 'height': 16, 'min': 12, 'max': 18, 'spawnPercent': 35}, 'units': [{'unitId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-unit-1', 'teamId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'position': {'x': 17, 'y': 1}, 'inventory': {'gold': 0, 'iron': 0}, 'inventoryCapacity': 8, 'readyOnTurn': 11}], 'bases': [{'baseId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-base-1', 'teamId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'position': {'x': 17, 'y':9}}], 'baseResourceDeposits': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-base-1': {'gold': 0, 'iron': 0}}, 'scores': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48': 0, 'bot-44817eaa-2c8e-48ba-96d0-b2a75dc52f0d': 0, 'bot-d9e4df95-b246-42fa-b717-9feac57bbaeb': 0, 'bot-2c7f144f-d9dc-4ab1-a876-a390b00fbaf3': 0}, 'teamResources': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48': {'gold': 0, 'iron': 15}}, 'warnings': [], 'info': [], 'effects': []}, 'serverTimeMs': 1792859395940}
-submitted turn 11, actions: {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-unit-1': {'type': 'move', 'direction': 'north'}}
+{'actionRevisions': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-unit-1': 11
+    }, 'match': {'teams': [
+            {'id': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'displayName': '[BYU
+                ] Ctrl + Alt + Elite', 'botType': False
+            },
+            {'id': 'bot-44817eaa-2c8e-48ba-96d0-b2a75dc52f0d', 'displayName': 'Bot 1', 'botType': 'prospector'
+            },
+            {'id': 'bot-d9e4df95-b246-42fa-b717-9feac57bbaeb', 'displayName': 'Bot 2', 'botType': 'prospector'
+            },
+            {'id': 'bot-2c7f144f-d9dc-4ab1-a876-a390b00fbaf3', 'displayName': 'Bot 3', 'botType': 'prospector'
+            }
+        ], 'matchId': 'match-a83a3308-d0b0-455f-8ea3-4b0ca896c176', 'mode': 'practice', 'status': 'active', 'turnAdvanceMode': 'client-action', 'rulesVersion': 'lpc2026', 'turn': 11, 'maxTurns': 480, 'startedAtMs': 1792859393235, 'expectedTeamIds': ['team-1cb0d601-49ca-4e25-81c3-a13a737e2a48'
+        ], 'teamIds': ['team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'bot-44817eaa-2c8e-48ba-96d0-b2a75dc52f0d', 'bot-d9e4df95-b246-42fa-b717-9feac57bbaeb', 'bot-2c7f144f-d9dc-4ab1-a876-a390b00fbaf3'
+        ], 'activeTeamIds': ['team-1cb0d601-49ca-4e25-81c3-a13a737e2a48'
+        ]
+    }, 'view': {'turn': 11, 'map': {'width': 50, 'height': 50, 'cells': [
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'gold', 'amount': 8
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type':'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'mountain'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type': 'empty'
+                },
+                {'type':'crater', 'formation': {'x': 0, 'y': 0, 'size': 3
+                    }
+                },
+                {'type': 'crater', 'formation': {'x': 1, 'y': 0, 'size': 3
+                    }
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'crater', 'formation': {'x': 0, 'y': 0, 'size': 2
+                    }
+                },
+                {'type': 'crater', 'formation': {'x': 1, 'y': 0, 'size': 2
+                    }
+                },
+                {'type': 'crater', 'formation': {'x': 0, 'y': 1, 'size': 3
+                    }
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'crater', 'formation': {'x': 1, 'y': 1, 'size': 2
+                    }
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type':'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                },
+                {'type': 'hidden'
+                }
+            ]
+        }, 'highGoldArea': {'width': 16, 'height': 16, 'min': 12, 'max': 18, 'spawnPercent': 35
+        }, 'units': [
+            {'unitId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-unit-1', 'teamId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'position': {'x': 17, 'y': 1
+                }, 'inventory': {'gold': 0, 'iron': 0
+                }, 'inventoryCapacity': 8, 'readyOnTurn': 11
+            }
+        ], 'bases': [
+            {'baseId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-base-1', 'teamId': 'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48', 'position': {'x': 17, 'y': 9
+                }
+            }
+        ], 'baseResourceDeposits': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-base-1': {'gold': 0, 'iron': 0
+            }
+        }, 'scores': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48': 0, 'bot-44817eaa-2c8e-48ba-96d0-b2a75dc52f0d': 0, 'bot-d9e4df95-b246-42fa-b717-9feac57bbaeb': 0, 'bot-2c7f144f-d9dc-4ab1-a876-a390b00fbaf3': 0
+        }, 'teamResources': {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48': {'gold': 0, 'iron': 15
+            }
+        }, 'warnings': [], 'info': [], 'effects': []
+    }, 'serverTimeMs': 1792859395940
+}
+submitted turn 11, actions: {'team-1cb0d601-49ca-4e25-81c3-a13a737e2a48-unit-1': {'type': 'move', 'direction': 'north'
+    }
+}

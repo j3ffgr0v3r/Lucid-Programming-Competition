@@ -3,15 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+from bot_client import Action, MarsView, GameMap
+
 if TYPE_CHECKING:
     from bot import Bot
-from bot_client import (
-    Action,
-    Coordinate,
-    CoordinateGrid,
-    GameMap,
-    MarsView,
-)
+
 
 class State(ABC):
     """Shared behavior that selects an action for the supplied bot.
@@ -20,20 +16,12 @@ class State(ABC):
     turn. Keep per-bot progress on the bot, since state instances are shared.
     """
 
-    def __init__(self, grid: CoordinateGrid | GameMap):
-        self.grid = grid
-        self.view: MarsView | None = None
-        self.team_id: str | None = None
-
-    def update(self, view: MarsView, team_id: str) -> None:
-        """Refresh shared world data before any bot requests an action."""
-        self.grid = view["map"]
-        self.view = view
-        self.team_id = team_id
-
+    def __init__(self, view: MarsView) -> None:
+        self.view: MarsView = view
+        self.grid: GameMap = view["map"]
 
     @abstractmethod
-    def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
+    def next_action(self, bot: Bot) -> Action:
         """Return a destination tile for moves, or ``None`` for other actions."""
         raise NotImplementedError
 

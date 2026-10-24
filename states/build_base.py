@@ -7,6 +7,8 @@ from map_state import MapState
 from bot_client import Action, Coordinate, CoordinateGrid, Direction, GameMap, MarsView
 from .state import State
 
+BLOCKED_SEARCH_BUFFER = 3
+
 
 class BuildBase(State):
     """One shared behavior; each bot keeps its own target and selected site.
@@ -28,6 +30,7 @@ class BuildBase(State):
         self._reserved_sites: dict[str, tuple[int, int]] = {}
         self._remaining_iron = 0
         self._ore_searches = {}
+        self._blocked_builders: set[str] = set()
 
     def update(self, view: MarsView, team_id: str) -> None:
         super().update(view, team_id)
@@ -47,6 +50,7 @@ class BuildBase(State):
         bot.build_requested = False
         bot.build_in_center = center_only
         self._ore_searches.pop(bot.id, None)
+        self._blocked_builders.discard(bot.id)
         bot.set_state("BuildBase")
 
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
@@ -68,8 +72,14 @@ class BuildBase(State):
         if worker is None or worker["readyOnTurn"] > self.view["turn"]:
             return None, {"type": "pass"}
 
+        blocked = bot.id in self._blocked_builders
+        inventory = worker.get("inventory", {"gold": 0, "iron": 0})
+        carried = inventory["gold"] + inventory["iron"]
+        if blocked and carried and (bot.ore_returning or carried >= worker.get("inventoryCapacity", 8)):
+            # Finish banking fallback cargo even if a site opens during the trip.
+            return self._find_ore_near_target(bot, worker, blocked=True)
         if self._remaining_iron < 6:
-            return self._find_ore_near_target(bot, worker)
+            return self._find_ore_near_target(bot, worker, blocked=blocked)
 
         origin = bot.coordinates
         target = (bot.build_target["x"], bot.build_target["y"])
@@ -96,9 +106,7 @@ class BuildBase(State):
                 and all(abs(point[0] - x) + abs(point[1] - y) > 2 for x, y in enemy_bases)
             ]
             if not sites:
-                bot.build_site = None
-                bot.build_requested = False
-                return None, {"type": "pass"}
+                return self._collect_while_blocked(bot, worker)
 
             friendly = [point for point, base in bases.items() if base["teamId"] == self.team_id]
             center_tiles = {
@@ -130,6 +138,7 @@ class BuildBase(State):
         target_cell = self._cell(bot.build_target)
 
         if target_cell is not None and target_cell["type"] == "hidden":
+            self._blocked_builders.discard(bot.id)
             # Move toward unexplored space without treating fog as empty land.
             destination = min(
                 distances,
@@ -148,10 +157,9 @@ class BuildBase(State):
             and all(abs(point[0] - x) + abs(point[1] - y) > 2 for x, y in enemy_bases)
         ]
         if not candidates:
-            bot.build_site = None
-            bot.build_requested = False
-            return None, {"type": "pass"}
+            return self._collect_while_blocked(bot, worker)
 
+        self._blocked_builders.discard(bot.id)
         destination = min(
             candidates,
             key=lambda point: (abs(point[0] - target[0]) + abs(point[1] - target[1]),
@@ -169,7 +177,14 @@ class BuildBase(State):
         bot.build_requested = True
         return None, {"type": "build-base"}
 
-    def _find_ore_near_target(self, bot: Bot, worker) -> tuple[Coordinate | None, Action]:
+    def _collect_while_blocked(self, bot: Bot, worker) -> tuple[Coordinate | None, Action]:
+        """Collect nearby ore; reconsider construction on the next ready turn."""
+        bot.build_site = None
+        bot.build_requested = False
+        self._blocked_builders.add(bot.id)
+        return self._find_ore_near_target(bot, worker, blocked=True)
+
+    def _find_ore_near_target(self, bot: Bot, worker, *, blocked=False) -> tuple[Coordinate | None, Action]:
         """Search around this bot's base destination, preserving its build task."""
         template = self.states.get("FindAnyOreState")
         if template is None:
@@ -184,8 +199,16 @@ class BuildBase(State):
             height = min(self.grid["height"], rich["height"])
             center_left = (self.grid["width"] - width) // 2
             center_top = (self.grid["height"] - height) // 2
-            left, top = max(left, center_left), max(top, center_top)
-            right, bottom = min(right, center_left + width), min(bottom, center_top + height)
+            if blocked:
+                # A blocked center pocket may contain no eligible ore at all.
+                # Keep collecting in the center and its immediate surroundings.
+                left = max(0, center_left - BLOCKED_SEARCH_BUFFER)
+                top = max(0, center_top - BLOCKED_SEARCH_BUFFER)
+                right = min(self.grid["width"], center_left + width + BLOCKED_SEARCH_BUFFER)
+                bottom = min(self.grid["height"], center_top + height + BLOCKED_SEARCH_BUFFER)
+            else:
+                left, top = max(left, center_left), max(top, center_top)
+                right, bottom = min(right, center_left + width), min(bottom, center_top + height)
         if left >= right or top >= bottom:
             return None, {"type": "pass"}
 
@@ -201,6 +224,7 @@ class BuildBase(State):
         # Detach last turn's shared cache before update clears it.
         ore_state._route_cache = {}
         ore_state.update(self.view, self.team_id)
+        ore_state.turns_left = self.turns_left
         ore_state.states = self.states
         ore_state._route_cache = self._route_cache
         ore_state.ore_reservations = self.ore_reservations

@@ -75,7 +75,7 @@ class FindOreState(State):
             if self.resource is not None and cell["type"] != self.resource:
                 continue
             point = (index % self.grid["width"], index // self.grid["width"])
-            if point not in distances or not self._inside(point, bounds):
+            if point not in distances or not self._ore_allowed(point, bot, bounds):
                 continue
             owners = {
                 base["teamId"] for base in self.view["bases"]
@@ -94,7 +94,10 @@ class FindOreState(State):
 
         # Reserve only the cargo room a miner can fill. Large deposits can
         # support several rovers; small deposits should not draw the whole team.
-        ores = {point for point in ores if available(point) > 0}
+        ores = {
+            point for point in ores if available(point) > 0
+            and self.can_finish_ore_trip(bot, worker, point, distances[point], available(point))
+        }
         # Keep mining underfoot; do not break the mining streak for another target.
         if bot.coordinates in ores:
             bot.ore_target = bot.coordinates
@@ -115,6 +118,40 @@ class FindOreState(State):
             # A depleted small deposit should still become banked resources.
             return self._bank_action(bot)
         return self._explore(bot, bounds, distances, previous)
+
+    def can_finish_ore_trip(self, bot, worker, point, travel_turns, amount) -> bool:
+        """Budget the smallest useful pickup, conversion, return, and deposit."""
+        if self.turns_left is None:
+            return True
+        inventory = worker.get("inventory", {"gold": 0, "iron": 0}) if worker else {"gold": 0, "iron": 0}
+        capacity = worker.get("inventoryCapacity", 8) if worker else 8
+        cell = self.grid["cells"][point[1] * self.grid["width"] + point[0]]
+        mining_turns = 1
+        trade_turns = 0
+        if bot.state == "Trade":
+            if cell["type"] == "iron":
+                # One or two iron alone cannot produce banked gold. Account
+                # for enough mining to complete a batch of three.
+                mining_turns = 3 - inventory["iron"] % 3
+            trade_turns = (inventory["iron"] + (mining_turns if cell["type"] == "iron" else 0)) // 3
+        if mining_turns > amount or mining_turns > capacity - sum(inventory.values()):
+            return False
+
+        enemy_bases = {
+            (base["position"]["x"], base["position"]["y"])
+            for base in self.view["bases"] if base["teamId"] != bot.team_id
+        }
+        return_turns = float("inf")
+        for base in self.view["bases"]:
+            if base["teamId"] != bot.team_id:
+                continue
+            home = (base["position"]["x"], base["position"]["y"])
+            # Ore and base endpoints both take one turn to enter, so travel
+            # cost is symmetric. Cache one route map per base for all rovers.
+            # Banking may leave a patrol's perimeter to take the fastest route.
+            distances, _ = State._routes(self, home, enemy_bases, allow_hidden=True)
+            return_turns = min(return_turns, distances.get(point, float("inf")))
+        return travel_turns + mining_turns + trade_turns + return_turns + 1 <= self.turns_left
 
     def _bank_action(self, bot: Bot) -> Action:
         bot.ore_returning = True
@@ -185,6 +222,9 @@ class FindOreState(State):
     @staticmethod
     def _inside(point, bounds) -> bool:
         return bounds is None or (bounds[0] <= point[0] < bounds[2] and bounds[1] <= point[1] < bounds[3])
+
+    def _ore_allowed(self, point, bot, bounds) -> bool:
+        return self._inside(point, bounds)
 
     def _area_bounds(self) -> tuple[int, int, int, int] | None:
         if self.area is None:

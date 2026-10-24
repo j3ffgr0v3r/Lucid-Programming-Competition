@@ -18,12 +18,14 @@ class Bot:
         self.build_site: Coordinate | None = None
         self.build_requested = False
         self.build_in_center = False
-        # None uses the whole-map ore state; miners get opposing regions.
+        # A region index selects center mining; None selects perimeter patrol.
         self.search_area_index: int | None = None
         self.ore_search_scope: tuple | None = None
         self.ore_target: tuple[int, int] | None = None
         self.ore_explore_target: tuple[int, int] | None = None
         self.ore_returning = False
+        self.patrol_index: int | None = None
+        self.patrol_direction = 1
         
     def set_state(self, state: str | None) -> None:
         self.state = state

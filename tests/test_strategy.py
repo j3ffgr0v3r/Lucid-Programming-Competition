@@ -33,19 +33,16 @@ class StrategyTests(unittest.TestCase):
     def ore(self, x, y, resource):
         self.view["map"]["cells"][y * 9 + x] = {"type": resource, "amount": 4}
 
-    def test_nearest_bot_builds_and_others_search_opposite_regions_for_iron(self):
+    def test_builder_counts_toward_two_center_bots_and_other_rovers_patrol(self):
         manager = Manager(self.snapshot, self.identity)
         actions = manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["center"].state, "BuildBase")
         self.assertEqual(actions["center"], {"type": "build-base"})
         self.assertEqual(manager.bots["center"].build_target, {"x": 4, "y": 4})
         self.assertEqual(manager.bots["north"].state, "FindIronState")
-        self.assertEqual(manager.bots["south"].state, "FindIronState")
-        north = manager.search_areas[manager.bots["north"].search_area_index]
-        south = manager.search_areas[manager.bots["south"].search_area_index]
-        self.assertEqual(north["y"], 0)
-        self.assertEqual(north["height"], south["y"])
-        self.assertEqual(south["y"] + south["height"], 9)
+        self.assertEqual(manager.bots["south"].state, "PatrolOre")
+        self.assertEqual(manager._center_ids, {"center", "north"})
+        self.assertEqual(manager.states["PatrolOre"].resource, "iron")
 
     def test_builder_falls_back_to_nearest_any_ore_and_resumes_building(self):
         self.view["teamResources"]["ours"]["iron"] = 5
@@ -59,17 +56,18 @@ class StrategyTests(unittest.TestCase):
         self.view["teamResources"]["ours"]["iron"] = 6
         self.assertEqual(manager.calculate_actions(self.snapshot)["center"], {"type": "build-base"})
 
-    def test_after_three_friendly_bases_everyone_searches_any_ore(self):
+    def test_after_three_friendly_bases_two_search_center_and_others_patrol_for_any_ore(self):
         self.view["bases"].extend([self.base("second", 4, 4), self.base("third", 5, 4)])
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
-        self.assertTrue(all(bot.state == "FindAnyOreState" for bot in manager.bots.values()))
-        self.assertTrue(all(bot.search_area_index == manager.center_area_index for bot in manager.bots.values()))
+        self.assertEqual(sum(bot.state == "FindAnyOreState" for bot in manager.bots.values()), 2)
+        self.assertEqual(sum(bot.state == "PatrolOre" for bot in manager.bots.values()), 1)
+        self.assertIsNone(manager.states["PatrolOre"].resource)
         hidden = deepcopy(self.snapshot)
         hidden["view"]["bases"] = []
         manager.calculate_actions(hidden)
         self.assertEqual(len(manager.map_state.bases), 3)
-        self.assertTrue(all(bot.state == "FindAnyOreState" for bot in manager.bots.values()))
+        self.assertEqual(sum(bot.state == "FindAnyOreState" for bot in manager.bots.values()), 2)
 
     def test_three_bases_redirect_ore_search_to_center_plus_three_tile_buffer(self):
         self.view["map"] = {"width": 20, "height": 20, "cells": [{"type": "empty"} for _ in range(400)]}
@@ -80,8 +78,9 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         actions = manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.center_search_area, {"x": 5, "y": 5, "width": 10, "height": 10})
-        self.assertEqual(actions["north"], {"type": "move", "direction": "south-east"})
-        self.assertTrue(all(bot.search_area_index == manager.center_area_index for bot in manager.bots.values()))
+        self.assertEqual(actions["north"], {"type": "move", "direction": "east"})
+        self.assertEqual(manager.bots["north"].state, "PatrolOre")
+        self.assertEqual(manager._center_ids, {"center", "south"})
 
     def test_center_buffer_is_clipped_to_the_map(self):
         self.view["highGoldArea"].update(width=8, height=8)
@@ -114,7 +113,8 @@ class StrategyTests(unittest.TestCase):
         manager.calculate_actions(self.snapshot)
         for name, region in original.items():
             self.assertEqual(manager.bots[name].search_area_index, region)
-        self.assertNotIn(manager.bots["aaa-new"].search_area_index, original.values())
+        self.assertEqual(manager.bots["aaa-new"].state, "PatrolOre")
+        self.assertEqual(manager._center_ids, {"center", "north"})
 
     def test_confirmed_second_base_starts_next_build_without_resetting_pending_attempts(self):
         manager = Manager(self.snapshot, self.identity)
@@ -144,11 +144,11 @@ class StrategyTests(unittest.TestCase):
         self.view["units"] = []
         self.assertEqual(manager.calculate_actions(self.snapshot), {})
 
-    def test_iron_search_does_not_mine_gold_and_full_inventory_deposits(self):
+    def test_iron_search_collects_gold_along_the_way_and_full_inventory_deposits(self):
         self.ore(0, 0, "gold")
         self.ore(1, 0, "iron")
         manager = Manager(self.snapshot, self.identity)
-        self.assertEqual(manager.calculate_actions(self.snapshot)["north"], {"type": "move", "direction": "east"})
+        self.assertEqual(manager.calculate_actions(self.snapshot)["north"], {"type": "mine"})
         self.view["units"][1]["position"] = {"x": 0, "y": 1}
         self.view["units"][1]["inventory"] = {"gold": 0, "iron": 8}
         self.assertEqual(manager.calculate_actions(self.snapshot)["north"], {"type": "deposit"})

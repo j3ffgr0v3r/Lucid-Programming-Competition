@@ -97,7 +97,7 @@ class TradeTests(unittest.TestCase):
         self.assertFalse(manager.bots["worker"].ore_returning)
 
     def test_partial_gold_returns_before_deadline_even_with_ore_underfoot(self):
-        self.view["turn"] = 470
+        self.view["turn"] = 472  # Seven moves plus depositing consume all eight turns.
         self.worker["position"] = {"x": 7, "y": 7}
         self.worker["inventory"] = {"gold": 1, "iron": 0}
         self.view["map"]["cells"][7 * 15 + 7] = {"type": "gold", "amount": 12}

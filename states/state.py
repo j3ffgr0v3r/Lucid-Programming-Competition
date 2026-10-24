@@ -71,9 +71,9 @@ class State(ABC):
     def _is_integer(self, value: object) -> bool:
         return isinstance(value, int) and not isinstance(value, bool)
 
-    def _routes(self, origin, enemy_bases, *, allow_hidden=False):
+    def _routes(self, origin, enemy_bases, *, allow_hidden=False, allowed_cells=None):
         """Dijkstra distances in turns, including entry cooldowns."""
-        key = (origin, frozenset(enemy_bases), self.obstacle_cost, allow_hidden)
+        key = (origin, frozenset(enemy_bases), self.obstacle_cost, allow_hidden, allowed_cells)
         if key in self._route_cache:
             return self._route_cache[key]
         distances = {origin: 0}
@@ -88,6 +88,8 @@ class State(ABC):
                     if dx == dy == 0:
                         continue
                     neighbor = (point[0] + dx, point[1] + dy)
+                    if allowed_cells is not None and neighbor not in allowed_cells:
+                        continue
                     cell = self._cell({"x": neighbor[0], "y": neighbor[1]})
                     if cell is None or cell["type"] == "void" or neighbor in enemy_bases:
                         continue

@@ -13,10 +13,13 @@ from bot import Bot
 from bot_client import ActionsByEntity, BotState, Identity, mars_view
 from map_state import MapState
 from states.state import State
+from states.patrol_ore import PatrolOre
+from states.trade import BANK_TURN_BUFFER
 
 
 TRADE_TURNS_LEFT = 100
 CENTER_SEARCH_BUFFER = 3
+CENTER_BOT_COUNT = 2
 
 
 def bot_costs() -> Iterator[int]:
@@ -40,6 +43,7 @@ class Manager:
         self.max_turns = game_state["match"].get("maxTurns", 480)
         self.bots: dict[str, Bot] = {}
         self._builder_id: str | None = None
+        self._center_ids: set[str] = set()
         self._bot_costs = bot_costs()
         self._recruited_workers = 0
         self.next_bot_cost = next(self._bot_costs)
@@ -61,6 +65,7 @@ class Manager:
                     if name in state_classes:
                         raise ValueError(f"Duplicate state class name: {name}")
                     state_classes[name] = state_class
+        state_classes.setdefault("PatrolOre", PatrolOre)
 
         ore_names = ("FindAnyOreState", "FindIronState", "FindGoldState")
         for name in ore_names:
@@ -68,17 +73,7 @@ class Manager:
         ore_module = import_module(state_classes["FindAnyOreState"].__module__)
         search_area_class = getattr(ore_module, "SearchArea", ore_fallback.SearchArea)
         width, height = self.game_map["width"], self.game_map["height"]
-        half_x, half_y = width // 2, height // 2
         whole_map = search_area_class(x=0, y=0, width=width, height=height)
-        # Opposing pairs: north/south, east/west, NE/SW, NW/SE.
-        self.search_areas = [search_area_class(x=x, y=y, width=w, height=h) for x, y, w, h in (
-            (0, 0, width, max(1, half_y)), (0, half_y, width, height - half_y),
-            (half_x, 0, width - half_x, height), (0, 0, max(1, half_x), height),
-            (half_x, 0, width - half_x, max(1, half_y)),
-            (0, half_y, max(1, half_x), height - half_y),
-            (0, 0, max(1, half_x), max(1, half_y)),
-            (half_x, half_y, width - half_x, height - half_y),
-        )]
         rich = self.map_state.highGoldArea
         center_width, center_height = min(width, rich["width"]), min(height, rich["height"])
         center_left, center_top = (width - center_width) // 2, (height - center_height) // 2
@@ -86,8 +81,8 @@ class Manager:
         right = min(width, center_left + center_width + CENTER_SEARCH_BUFFER)
         bottom = min(height, center_top + center_height + CENTER_SEARCH_BUFFER)
         self.center_search_area = search_area_class(x=left, y=top, width=right - left, height=bottom - top)
-        self.center_area_index = len(self.search_areas)
-        self.search_areas.append(self.center_search_area)
+        self.center_area_index = 0
+        self.search_areas = [self.center_search_area]
         self.states: dict[str, State] = {
             name: state_class(self.map_state, whole_map) if name in ore_names else state_class(self.map_state)
             for name, state_class in state_classes.items()
@@ -100,18 +95,19 @@ class Manager:
         self._all_states = list(self.states.values()) + [
             state for instances in self.ore_states.values() for state in instances
         ]
-        # Alias the existing regional instance for Trade's post-banking search.
+        # Trade resumes either this center search or the perimeter patrol.
         self.states["CenterOre"] = self.ore_states["FindAnyOreState"][self.center_area_index]
         for state in self._all_states:
             state.states = self.states
 
     def strategize(self):
-        """Recruit first, then spread center bases and assign remaining miners."""
+        """Recruit first, build center bases, and split center/perimeter searches."""
         if self.max_turns - self.turn <= TRADE_TURNS_LEFT:
             self.states["BuildBase"].set_iron_budget(0)
+            self._assign_search_roles()
+            self.states["PatrolOre"].resource = None
             for bot in self.bots.values():
                 bot.set_state("Trade")
-                bot.search_area_index = None
             return
 
         center = {"x": self.game_map["width"] // 2, "y": self.game_map["height"] // 2}
@@ -152,10 +148,8 @@ class Manager:
             self._builder_id = None
 
         ore_state_name = "FindIronState" if len(our_bases) < 3 else "FindAnyOreState"
-        region_counts = [0] * self.center_area_index
-        for bot in self.bots.values():
-            if bot is not builder and bot.id not in spawners and bot.search_area_index in range(self.center_area_index):
-                region_counts[bot.search_area_index] += 1
+        self._assign_search_roles(builder)
+        self.states["PatrolOre"].resource = "iron" if len(our_bases) < 3 else None
         for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
             if bot.id in spawners:
                 bot.set_state("SpawnBot")
@@ -167,13 +161,73 @@ class Manager:
                     self.states["BuildBase"].assign(bot, center, center_only=True)
                 bot.set_state("BuildBase")
             else:
-                bot.set_state(ore_state_name)
-                if len(our_bases) >= 3:
-                    bot.search_area_index = self.center_area_index
-                elif bot.search_area_index not in range(self.center_area_index):
-                    bot.search_area_index = min(range(self.center_area_index), key=lambda index: (region_counts[index], index))
-                    region_counts[bot.search_area_index] += 1
-        
+                bot.set_state(ore_state_name if bot.id in self._center_ids else "PatrolOre")
+
+    def _assign_search_roles(self, builder=None):
+        """Keep two center rovers, counting the builder, and spread patrol starts."""
+        selected = {builder.id} if builder is not None else set()
+        center = (self.game_map["width"] // 2, self.game_map["height"] // 2)
+        candidates = sorted(self.bots.values(), key=lambda bot: (
+            bot.id not in self._center_ids,
+            (bot.coordinates[0] - center[0]) ** 2 + (bot.coordinates[1] - center[1]) ** 2,
+            bot.id,
+        ))
+        for bot in candidates:
+            if len(selected) >= CENTER_BOT_COUNT:
+                break
+            selected.add(bot.id)
+        self._center_ids = selected
+        patrol = self.states["PatrolOre"]
+        counts = [0] * len(patrol.waypoints)
+        for bot in self.bots.values():
+            if bot.id not in selected and bot.patrol_index is not None:
+                counts[bot.patrol_index] += 1
+        for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
+            bot.search_area_index = self.center_area_index if bot.id in selected else None
+            if bot.id not in selected and bot.patrol_index is None:
+                bot.patrol_index = min(range(len(counts)), key=lambda index: (
+                    counts[index],
+                    max(abs(patrol.waypoints[index][0] - bot.coordinates[0]),
+                        abs(patrol.waypoints[index][1] - bot.coordinates[1])), index,
+                ))
+                bot.patrol_direction = 1 if sum(counts) % 2 == 0 else -1
+                counts[bot.patrol_index] += 1
+
+    def _mine_on_the_way(self, bot, worker, action):
+        """Pause travel to mine underfoot while preserving the assigned trip."""
+        if action["type"] != "move":
+            return action
+        inventory = worker.get("inventory", {"gold": 0, "iron": 0})
+        room = worker.get("inventoryCapacity", 8) - sum(inventory.values())
+        x, y = bot.coordinates
+        cell = self.game_map["cells"][y * self.game_map["width"] + x]
+        if room <= 0 or cell["type"] not in ("iron", "gold") or cell.get("amount", 0) <= 0:
+            return action
+        owners = {
+            base["teamId"] for base in self.map_state.bases
+            if abs(base["position"]["x"] - x) + abs(base["position"]["y"] - y) <= 2
+        }
+        if owners and self.team_id not in owners:
+            return action
+        if self.max_turns - self.turn <= TRADE_TURNS_LEFT:
+            bank_turns = self.states["Bank"].turns_to_bank(bot)
+            trades = (inventory["iron"] + (cell["type"] == "iron")) // 3
+            if bank_turns is None or self.max_turns - self.turn <= bank_turns + trades + BANK_TURN_BUFFER + 1:
+                return action
+        reservations = self.states["BuildBase"].ore_reservations
+        reserved = sum(amount for unit_id, amount in reservations.get((x, y), {}).items() if unit_id != bot.id)
+        if cell["amount"] <= reserved:
+            return action
+        if not self.states["PatrolOre"].can_finish_ore_trip(
+            bot, worker, (x, y), 0, cell["amount"] - reserved
+        ):
+            return action
+        # The proposed move may have reserved a distant deposit. Release it
+        # while this rover fills its cargo here, without discarding its target.
+        for claims in reservations.values():
+            claims.pop(bot.id, None)
+        reservations.setdefault((x, y), {})[bot.id] = min(room, cell["amount"] - reserved)
+        return {"type": "mine"}
 
     def calculate_actions(self, game_state: BotState) -> ActionsByEntity:
         """Refresh bots, assign their states, then collect their actions."""
@@ -246,7 +300,7 @@ class Manager:
                     state = self.ore_states[bot.state][bot.search_area_index]
                 result = state.next_action(bot)
                 action = result[1] if isinstance(result, tuple) else result
-                actions[unit_id] = action
+                actions[unit_id] = self._mine_on_the_way(bot, workers[unit_id], action)
                 # Coordinates come from the next server snapshot, not the
                 # requested destination: movement may fail or be interrupted.
         return actions

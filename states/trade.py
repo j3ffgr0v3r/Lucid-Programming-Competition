@@ -17,9 +17,26 @@ class Trade(State):
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
         carried = inventory["gold"] + inventory["iron"]
         bank = self.states.get("Bank")
+        search_state = "CenterOre" if bot.search_area_index is not None else "PatrolOre"
+        at_base = any(
+            base["teamId"] == bot.team_id
+            and (base["position"]["x"], base["position"]["y"]) == bot.coordinates
+            for base in self.view["bases"]
+        )
+        if at_base and inventory["iron"] >= 3:
+            # Already home: no travel uncertainty remains. Spend one turn on
+            # each profitable trade, retaining the final turn for depositing.
+            if self.turns_left is None or self.turns_left >= 2:
+                return {"type": "trade", "from": "iron"}
+            return self._delegate("Bank", bot)
         if carried and self.turns_left is not None and bank is not None:
             bank_turns = bank.turns_to_bank(bot)
             if bank_turns is not None and self.turns_left <= bank_turns + inventory["iron"] // 3 + BANK_TURN_BUFFER:
+                if not bot.ore_returning and inventory["iron"] < 3:
+                    # Allow another pickup only if its whole trip still fits.
+                    # The ore state rechecks stock, terrain, and time;
+                    # otherwise it sends the existing cargo home.
+                    return self._delegate(search_state, bot)
                 # Carried gold does not score: leave enough time to deposit it.
                 bot.ore_returning = True
                 return self._delegate("Bank", bot)
@@ -27,12 +44,11 @@ class Trade(State):
             # Trades use inventory, not shared bank iron, and consume one turn.
             return {"type": "trade", "from": "iron"}
 
-        # Collect a fuller load while time permits. CenterOre also deposits at
-        # home and returns partial loads when no eligible ore remains.
+        # Resume this rover's assigned search after trading or banking.
         next_state = "Bank" if (
             carried >= worker.get("inventoryCapacity", 8)
             or (carried and bot.ore_returning)
-        ) else "CenterOre"
+        ) else search_state
         return self._delegate(next_state, bot)
 
     def _delegate(self, next_state: str, bot: Bot) -> Action:

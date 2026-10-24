@@ -1,5 +1,6 @@
 """Persistent map data copied from a Mars view."""
 
+from copy import deepcopy
 from typing import cast
 
 from bot_client import Base, GameMap, HighGoldSettings, MapCell, MarsView
@@ -18,9 +19,9 @@ class MapState:
         self.map: GameMap = {
             "width": game_map["width"],
             "height": game_map["height"],
-            "cells": list(game_map["cells"]),
+            "cells": deepcopy(list(game_map["cells"])),
         }
-        self.bases: list[Base] = list(view["bases"])
+        self.bases: list[Base] = deepcopy(list(view["bases"]))
         self.highGoldArea: HighGoldSettings = cast(
             HighGoldSettings, dict(view["highGoldArea"])
         )
@@ -42,8 +43,9 @@ class MapState:
             if updated_cell["type"] == "hidden":
                 continue
             if cells[index] != updated_cell:
-                cells[index] = updated_cell
+                cells[index] = deepcopy(updated_cell)
 
+        known_bases = {base["baseId"]: base for base in self.bases}
         for base in view["bases"]:
-            if base not in self.bases:
-                self.bases.append(base)
+            known_bases[base["baseId"]] = deepcopy(base)
+        self.bases = list(known_bases.values())

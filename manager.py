@@ -8,8 +8,10 @@ from inspect import getmembers, isabstract, isclass
 from pkgutil import iter_modules
 
 import states
+import ore_fallback
 from bot import Bot
 from bot_client import ActionsByEntity, BotState, Identity, mars_view
+from map_state import MapState
 from states.state import State
 
 
@@ -36,11 +38,11 @@ class Manager:
         self._bot_costs = bot_costs()
         self._recruited_workers = 0
         self.next_bot_cost = next(self._bot_costs)
-        self.game_map = view["map"]
+        self.map_state = MapState(view)
+        self.game_map = self.map_state.map
 
-        # State classes in states/*.py share the State(grid) constructor.
-        # Each manager owns one instance per class, keyed by class name.
-        self.states: dict[str, State] = {}
+        # Discover the team's implementations before choosing any fallbacks.
+        state_classes = {}
         for module_info in iter_modules(states.__path__, states.__name__ + "."):
             module = import_module(module_info.name)
             for name, state_class in getmembers(module, isclass):
@@ -49,27 +51,68 @@ class Manager:
                     and issubclass(state_class, State)
                     and not isabstract(state_class)
                 ):
-                    if name in self.states:
+                    if name in state_classes:
                         raise ValueError(f"Duplicate state class name: {name}")
-                    self.states[name] = state_class(self.game_map)
+                    state_classes[name] = state_class
+
+        ore_names = ("FindAnyOreState", "FindIronState", "FindGoldState")
+        for name in ore_names:
+            state_classes.setdefault(name, getattr(ore_fallback, name))
+        ore_module = import_module(state_classes["FindAnyOreState"].__module__)
+        search_area_class = getattr(ore_module, "SearchArea", ore_fallback.SearchArea)
+        width, height = self.game_map["width"], self.game_map["height"]
+        half_x, half_y = width // 2, height // 2
+        whole_map = search_area_class(0, 0, width, height)
+        # Opposing pairs: north/south, east/west, NE/SW, NW/SE.
+        self.search_areas = [search_area_class(*bounds) for bounds in (
+            (0, 0, width, max(1, half_y)), (0, half_y, width, height - half_y),
+            (half_x, 0, width - half_x, height), (0, 0, max(1, half_x), height),
+            (half_x, 0, width - half_x, max(1, half_y)),
+            (0, half_y, max(1, half_x), height - half_y),
+            (0, 0, max(1, half_x), max(1, half_y)),
+            (half_x, half_y, width - half_x, height - half_y),
+        )]
+        self.states: dict[str, State] = {
+            name: state_class(self.map_state, whole_map) if name in ore_names else state_class(self.game_map)
+            for name, state_class in state_classes.items()
+        }
+        # SearchArea is constructor data, so cache one instance per region.
+        self.ore_states = {
+            name: [state_classes[name](self.map_state, area) for area in self.search_areas]
+            for name in ore_names
+        }
+        self._all_states = list(self.states.values()) + [
+            state for instances in self.ore_states.values() for state in instances
+        ]
+        for state in self._all_states:
+            state.states = self.states
 
     def strategize(self):
-        """
-        Choose each bot's role with bot.set_state("StateClassName").
-        Use self.bank and self.next_bot_cost when planning recruitment.
-        Keep its existing state until a change of role is needed.
-        """
-        for bot in self.bots.values():
-            # Recruitment is a one-turn assignment; reassess affordability.
-            if bot.state == "SpawnBot":
-                bot.set_state(None)
+        """Send one central builder until we own three bases; spread miners."""
+        center = {"x": self.game_map["width"] // 2, "y": self.game_map["height"] // 2}
+        our_bases = [base for base in self.map_state.bases if base["teamId"] == self.team_id]
+        builder = None
+        if len(our_bases) < 3 and self.bots:
+            builder = min(
+                self.bots.values(),
+                key=lambda bot: ((bot.coordinates[0] - center["x"]) ** 2
+                                 + (bot.coordinates[1] - center["y"]) ** 2, bot.id),
+            )
 
-        # Assign one ready builder so bots do not all spend the same iron.
-        if self.bank["iron"] >= self.next_bot_cost:
-            for unit_id, bot in self.bots.items():
-                if bot.state is None and self.workers[unit_id]["readyOnTurn"] <= self.turn:
-                    bot.set_state("SpawnBot")
-                    break
+        ore_state_name = "FindIronState" if len(our_bases) < 3 else "FindAnyOreState"
+        miners = 0
+        for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
+            if bot is builder:
+                confirmed = bot.build_requested and any(
+                    base["position"] == bot.build_site for base in our_bases
+                )
+                if bot.state != "BuildBase" or bot.build_target != center or confirmed:
+                    self.states["BuildBase"].assign(bot, center)
+                bot.search_area_index = None
+            else:
+                bot.set_state(ore_state_name)
+                bot.search_area_index = miners % len(self.search_areas)
+                miners += 1
         
 
     def calculate_actions(self, game_state: BotState) -> ActionsByEntity:
@@ -81,7 +124,8 @@ class Manager:
             return {}
 
         self.turn = view["turn"]
-        self.game_map = view["map"]
+        self.map_state.update(view)
+        self.game_map = self.map_state.map
         self.bank = view["teamResources"][self.team_id]
         workers = self.workers = {
             worker["unitId"]: worker
@@ -104,8 +148,13 @@ class Manager:
             else:
                 self.bots[unit_id].update_coordinates(coordinates)
 
-        for state in self.states.values():
-            state.update(view, self.team_id)
+        # Route over remembered terrain and bases, with fresh units and bank.
+        planning_view = dict(view, map=self.game_map, bases=self.map_state.bases)
+        route_cache = {}
+        for state in self._all_states:
+            state.update(planning_view, self.team_id)
+            # All states use the same remembered map this turn.
+            state._route_cache = route_cache
 
         self.strategize()
 
@@ -114,7 +163,10 @@ class Manager:
             if workers[unit_id]["readyOnTurn"] > self.turn or bot.state is None:
                 actions[unit_id] = {"type": "pass"}
             else:
-                _, action = self.states[bot.state].next_action(bot)
+                state = self.states[bot.state]
+                if bot.state in self.ore_states and bot.search_area_index is not None:
+                    state = self.ore_states[bot.state][bot.search_area_index]
+                _, action = state.next_action(bot)
                 actions[unit_id] = action
                 # Coordinates come from the next server snapshot, not the
                 # requested destination: movement may fail or be interrupted.

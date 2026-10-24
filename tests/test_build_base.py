@@ -12,6 +12,7 @@ class BuildBaseTests(unittest.TestCase):
         self.view = {
             "turn": 1, "map": self.grid, "units": [self.worker], "bases": [],
             "teamResources": {"ours": {"gold": 0, "iron": 20}},
+            "highGoldArea": {"width": 3, "height": 3, "min": 12, "max": 18, "spawnPercent": 35},
         }
         self.bot = Bot("Builder", "builder", (0, 2))
         self.state = BuildBase(self.grid)
@@ -150,10 +151,10 @@ class BuildBaseTests(unittest.TestCase):
         self.assertEqual(self.state.next_action(other)[1]["type"], "pass")
 
     def test_manager_discovers_state_and_preserves_build_assignment(self):
+        self.worker["position"] = {"x": 3, "y": 2}
         snapshot = {"match": {"matchId": "test"}, "view": self.view}
         manager = Manager(snapshot, {"teamId": "ours", "displayName": "Test"})
         manager.calculate_actions(snapshot)
-        manager.states["BuildBase"].assign(manager.bots["builder"], {"x": 0, "y": 2})
         self.assertEqual(manager.calculate_actions(snapshot)["builder"], {"type": "build-base"})
 
     def test_invalid_target_is_rejected(self):

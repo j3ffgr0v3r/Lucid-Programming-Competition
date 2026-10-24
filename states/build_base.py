@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from heapq import heappop, heappush
-
 from bot import Bot
 from bot_client import Action, Coordinate, CoordinateGrid, Direction, GameMap, MarsView
 from .state import State
@@ -15,7 +13,7 @@ class BuildBase(State):
     Assign with assign(bot, {"x": 10, "y": 12}). Fallback sites minimize
     Manhattan distance from that target, then travel time from the bot.
     Routes use eight directions and the default three-turn obstacle cost.
-    Only currently visible terrain is used; hidden targets are approached
+    The manager supplies remembered terrain; never-seen targets are approached
     until revealed. Unseen enemy claims can still cause a build to fail.
     """
 
@@ -59,6 +57,14 @@ class BuildBase(State):
         worker = next((unit for unit in self.view["units"] if unit["unitId"] == bot.id), None)
         if worker is None or worker["readyOnTurn"] > self.view["turn"]:
             return None, {"type": "pass"}
+
+        if self._remaining_iron < 6:
+            # Keep the build assignment and target so we resume after banking.
+            # The whole-map instance finds the nearest ore of either resource.
+            ore_state = self.states.get("FindAnyOreState")
+            if ore_state is None:
+                return None, {"type": "pass"}
+            return ore_state.next_action(bot)
 
         origin = bot.coordinates
         target = (bot.build_target["x"], bot.build_target["y"])
@@ -111,41 +117,3 @@ class BuildBase(State):
         bot.build_requested = True
         return None, {"type": "build-base"}
 
-    def _routes(self, origin, enemy_bases):
-        """Dijkstra distances in turns, including entry cooldowns."""
-        distances = {origin: 0}
-        previous = {}
-        queue = [(0, origin)]
-        while queue:
-            cost, point = heappop(queue)
-            if cost != distances[point]:
-                continue
-            for dy in (-1, 0, 1):
-                for dx in (-1, 0, 1):
-                    if dx == dy == 0:
-                        continue
-                    neighbor = (point[0] + dx, point[1] + dy)
-                    cell = self._cell({"x": neighbor[0], "y": neighbor[1]})
-                    if cell is None or cell["type"] in ("hidden", "void") or neighbor in enemy_bases:
-                        continue
-                    step_cost = self.obstacle_cost if cell["type"] in ("mountain", "crater") else 1
-                    candidate = cost + step_cost
-                    if candidate < distances.get(neighbor, float("inf")):
-                        distances[neighbor] = candidate
-                        previous[neighbor] = point
-                        heappush(queue, (candidate, neighbor))
-        return distances, previous
-
-    def _move(self, origin, destination, previous) -> tuple[Coordinate | None, Action]:
-        if destination == origin:
-            return None, {"type": "pass"}
-        step = destination
-        while previous[step] != origin:
-            step = previous[step]
-        dx, dy = step[0] - origin[0], step[1] - origin[1]
-        directions: dict[tuple[int, int], Direction] = {
-            (0, -1): "north", (1, -1): "north-east", (1, 0): "east",
-            (1, 1): "south-east", (0, 1): "south", (-1, 1): "south-west",
-            (-1, 0): "west", (-1, -1): "north-west",
-        }
-        return {"x": step[0], "y": step[1]}, {"type": "move", "direction": directions[(dx, dy)]}

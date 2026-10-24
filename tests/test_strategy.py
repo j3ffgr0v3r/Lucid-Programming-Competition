@@ -37,7 +37,8 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         actions = manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["center"].state, "BuildBase")
-        self.assertEqual(actions["center"], {"type": "build-base"})
+        self.assertEqual(actions["center"], {"type": "move", "direction": "south-east"})
+        self.assertEqual(manager.bots["center"].build_target, {"x": 5, "y": 5})
         self.assertEqual(manager.bots["north"].state, "FindIronState")
         self.assertEqual(manager.bots["south"].state, "FindIronState")
         north = manager.search_areas[manager.bots["north"].search_area_index]
@@ -56,6 +57,8 @@ class StrategyTests(unittest.TestCase):
         self.assertEqual(manager.bots["center"].state, "BuildBase")
         self.assertEqual(manager.bots["center"].build_target, {"x": 4, "y": 4})
         self.view["teamResources"]["ours"]["iron"] = 6
+        self.assertEqual(manager.calculate_actions(self.snapshot)["center"], {"type": "move", "direction": "south-east"})
+        self.view["units"][0]["position"] = {"x": 5, "y": 5}
         self.assertEqual(manager.calculate_actions(self.snapshot)["center"], {"type": "build-base"})
 
     def test_after_three_friendly_bases_everyone_searches_any_ore(self):

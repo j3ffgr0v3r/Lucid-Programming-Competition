@@ -67,9 +67,9 @@ class State(ABC):
     def _is_integer(self, value: object) -> bool:
         return isinstance(value, int) and not isinstance(value, bool)
 
-    def _routes(self, origin, enemy_bases):
+    def _routes(self, origin, enemy_bases, *, allow_hidden=False):
         """Dijkstra distances in turns, including entry cooldowns."""
-        key = (origin, frozenset(enemy_bases), self.obstacle_cost)
+        key = (origin, frozenset(enemy_bases), self.obstacle_cost, allow_hidden)
         if key in self._route_cache:
             return self._route_cache[key]
         distances = {origin: 0}
@@ -85,9 +85,12 @@ class State(ABC):
                         continue
                     neighbor = (point[0] + dx, point[1] + dy)
                     cell = self._cell({"x": neighbor[0], "y": neighbor[1]})
-                    if cell is None or cell["type"] in ("hidden", "void") or neighbor in enemy_bases:
+                    if cell is None or cell["type"] == "void" or neighbor in enemy_bases:
                         continue
-                    step_cost = self.obstacle_cost if cell["type"] in ("mountain", "crater") else 1
+                    if cell["type"] == "hidden" and not allow_hidden:
+                        continue
+                    # Exploration estimates unknown terrain conservatively.
+                    step_cost = self.obstacle_cost if cell["type"] in ("mountain", "crater", "hidden") else 1
                     candidate = cost + step_cost
                     if candidate < distances.get(neighbor, float("inf")):
                         distances[neighbor] = candidate

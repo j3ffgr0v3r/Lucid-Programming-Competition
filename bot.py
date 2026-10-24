@@ -17,6 +17,7 @@ class Bot:
         self.build_target: Coordinate | None = None
         self.build_site: Coordinate | None = None
         self.build_requested = False
+        self.build_in_center = False
         # None uses the whole-map ore state; miners get opposing regions.
         self.search_area_index: int | None = None
         

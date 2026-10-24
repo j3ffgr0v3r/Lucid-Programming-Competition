@@ -90,13 +90,34 @@ class Manager:
             state.states = self.states
 
     def strategize(self):
-        """Send one central builder until we own three bases; spread miners."""
+        """Recruit first, then spread center bases and assign remaining miners."""
         center = {"x": self.game_map["width"] // 2, "y": self.game_map["height"] // 2}
         our_bases = [base for base in self.map_state.bases if base["teamId"] == self.team_id]
+
+        # Forecast prices without advancing the confirmed-recruit generator.
+        prices = bot_costs()
+        for _ in range(self._recruited_workers):
+            next(prices)
+        next_price = next(prices)
+        remaining_iron = self.bank["iron"]
+        spawners = set()
+        ready = [bot for bot in self.bots.values() if self.workers[bot.id]["readyOnTurn"] <= self.turn]
+        # Prefer outer workers, leaving a central worker free to build if possible.
+        ready.sort(key=lambda bot: (-((bot.coordinates[0] - center["x"]) ** 2
+                                     + (bot.coordinates[1] - center["y"]) ** 2), bot.id))
+        for bot in ready:
+            if remaining_iron < next_price:
+                break
+            spawners.add(bot.id)
+            remaining_iron -= next_price
+            next_price = next(prices)
+        self.states["BuildBase"].set_iron_budget(remaining_iron)
+
         builder = None
-        if len(our_bases) < 3 and self.bots:
+        available = [bot for bot in self.bots.values() if bot.id not in spawners]
+        if len(our_bases) < 3 and available:
             builder = min(
-                self.bots.values(),
+                available,
                 key=lambda bot: ((bot.coordinates[0] - center["x"]) ** 2
                                  + (bot.coordinates[1] - center["y"]) ** 2, bot.id),
             )
@@ -104,12 +125,15 @@ class Manager:
         ore_state_name = "FindIronState" if len(our_bases) < 3 else "FindAnyOreState"
         miners = 0
         for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
-            if bot is builder:
+            if bot.id in spawners:
+                bot.set_state("SpawnBot")
+                bot.search_area_index = None
+            elif bot is builder:
                 confirmed = bot.build_requested and any(
                     base["position"] == bot.build_site for base in our_bases
                 )
-                if bot.state != "BuildBase" or bot.build_target != center or confirmed:
-                    self.states["BuildBase"].assign(bot, center)
+                if bot.state != "BuildBase" or not bot.build_in_center or confirmed:
+                    self.states["BuildBase"].assign(bot, center, center_only=True)
                 bot.search_area_index = None
             else:
                 bot.set_state(ore_state_name)
@@ -161,7 +185,9 @@ class Manager:
         self.strategize()
 
         actions: ActionsByEntity = {}
-        for unit_id, bot in self.bots.items():
+        # Construction spends bank iron in submission order: spawns go first.
+        ordered_bots = sorted(self.bots.items(), key=lambda item: (item[1].state != "SpawnBot", item[0]))
+        for unit_id, bot in ordered_bots:
             if workers[unit_id]["readyOnTurn"] > self.turn or bot.state is None:
                 actions[unit_id] = {"type": "pass"}
             else:

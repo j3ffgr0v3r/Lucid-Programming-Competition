@@ -151,11 +151,57 @@ class BuildBaseTests(unittest.TestCase):
         self.assertEqual(self.state.next_action(other)[1]["type"], "pass")
 
     def test_manager_discovers_state_and_preserves_build_assignment(self):
-        self.worker["position"] = {"x": 3, "y": 2}
+        self.worker["position"] = {"x": 2, "y": 1}
+        self.view["units"].extend([self.unit("other-1", 0, 0), self.unit("other-2", 6, 4)])
+        self.view["teamResources"]["ours"]["iron"] = 6
         snapshot = {"match": {"matchId": "test"}, "view": self.view}
         manager = Manager(snapshot, {"teamId": "ours", "displayName": "Test"})
         manager.calculate_actions(snapshot)
         self.assertEqual(manager.calculate_actions(snapshot)["builder"], {"type": "build-base"})
+
+    def test_center_build_chooses_farthest_site_from_existing_base(self):
+        self.base(2, 1)
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        self.act()
+        self.assertEqual(self.bot.build_target, {"x": 4, "y": 3})
+        self.assertEqual(self.bot.build_site, {"x": 4, "y": 3})
+
+    def test_center_build_maximizes_distance_to_nearest_friendly_base(self):
+        self.base(2, 1)
+        self.base(4, 3)
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        self.act()
+        site = self.bot.build_site
+        separation = min((site["x"] - x) ** 2 + (site["y"] - y) ** 2 for x, y in ((2, 1), (4, 3)))
+        self.assertEqual(separation, 4)
+        self.assertIn((site["x"], site["y"]), ((2, 3), (4, 1)))
+
+    def test_blocked_center_site_falls_back_within_center(self):
+        self.base(2, 1)
+        self.cell(4, 3, "gold")
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        self.act()
+        self.assertEqual(self.bot.build_site, {"x": 3, "y": 3})
+
+    def test_no_center_site_never_builds_on_available_outer_tile(self):
+        for x in range(2, 5):
+            for y in range(1, 4):
+                self.cell(x, y, "mountain")
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        self.assertEqual(self.act()[1], {"type": "pass"})
+        self.assertIsNone(self.bot.build_site)
+
+    def test_unexplored_center_is_approached_without_building_outside(self):
+        self.base(0, 0)
+        for x in range(2, 5):
+            for y in range(1, 4):
+                self.cell(x, y, "hidden")
+        self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
+        step, action = self.act()
+        self.assertEqual(action["type"], "move")
+        self.assertEqual(self.bot.build_target, {"x": 4, "y": 3})
+        self.assertIsNone(self.bot.build_site)
+        self.assertIsNotNone(step)
 
     def test_invalid_target_is_rejected(self):
         for target in ({"x": -1, "y": 0}, {"x": 7, "y": 0}, {"x": 0.5, "y": 0}):

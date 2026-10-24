@@ -16,6 +16,8 @@ class BuildBase(State):
     Routes use eight directions and the default three-turn obstacle cost.
     The manager supplies remembered terrain; never-seen targets are approached
     until revealed. Unseen enemy claims can still cause a build to fail.
+    With center_only=True, choose the center site whose nearest friendly base
+    is farthest away (Euclidean distance); every fallback stays in the center.
     """
 
     def __init__(self, grid: CoordinateGrid | GameMap | MapState, obstacle_cost: int = 3):
@@ -31,13 +33,18 @@ class BuildBase(State):
         self._reserved_sites.clear()
         self._remaining_iron = view["teamResources"][team_id]["iron"]
 
-    def assign(self, bot: Bot, target: Coordinate) -> None:
+    def set_iron_budget(self, iron: int) -> None:
+        """Use only the bank iron left after higher-priority spawn orders."""
+        self._remaining_iron = max(0, iron)
+
+    def assign(self, bot: Bot, target: Coordinate, *, center_only: bool = False) -> None:
         """Start a new build task without changing another bot's target."""
         if self._cell(target) is None:
             raise ValueError("The base target must be an integer coordinate on the map.")
         bot.build_target = dict(target)
         bot.build_site = None
         bot.build_requested = False
+        bot.build_in_center = center_only
         bot.set_state("BuildBase")
 
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
@@ -77,7 +84,40 @@ class BuildBase(State):
             for unit in self.view["units"] if unit["unitId"] != bot.id
         }
         reserved = {point for unit_id, point in self._reserved_sites.items() if unit_id != bot.id}
-        distances, previous = self._routes(origin, enemy_bases)
+        distances, previous = self._routes(origin, enemy_bases, allow_hidden=bot.build_in_center)
+
+        if bot.build_in_center:
+            area = self.view["highGoldArea"]
+            width = min(self.grid["width"], area["width"])
+            height = min(self.grid["height"], area["height"])
+            left = (self.grid["width"] - width) // 2
+            top = (self.grid["height"] - height) // 2
+            sites = [
+                point for point in distances
+                if left <= point[0] < left + width and top <= point[1] < top + height
+                and self._cell({"x": point[0], "y": point[1]})["type"] in ("empty", "hidden")
+                and point not in bases and point not in occupied and point not in reserved
+                and all(abs(point[0] - x) + abs(point[1] - y) > 2 for x, y in enemy_bases)
+            ]
+            if not sites:
+                bot.build_site = None
+                bot.build_requested = False
+                return None, {"type": "pass"}
+
+            friendly = [point for point, base in bases.items() if base["teamId"] == self.team_id]
+
+            def spacing(point):
+                separations = [(point[0] - x) ** 2 + (point[1] - y) ** 2 for x, y in friendly]
+                # Without any base, start at an edge to leave room for others.
+                edge_distance = (2 * point[0] - (2 * left + width - 1)) ** 2 + (
+                    2 * point[1] - (2 * top + height - 1)
+                ) ** 2
+                return (min(separations, default=edge_distance), sum(separations),
+                        -distances[point], -point[1], -point[0])
+
+            target = max(sites, key=spacing)
+            bot.build_target = {"x": target[0], "y": target[1]}
+
         target_cell = self._cell(bot.build_target)
 
         if target_cell is not None and target_cell["type"] == "hidden":
@@ -93,7 +133,8 @@ class BuildBase(State):
 
         candidates = [
             point for point in distances
-            if self._cell({"x": point[0], "y": point[1]})["type"] == "empty"
+            if (not bot.build_in_center or point == target)
+            and self._cell({"x": point[0], "y": point[1]})["type"] == "empty"
             and point not in bases and point not in occupied and point not in reserved
             and all(abs(point[0] - x) + abs(point[1] - y) > 2 for x, y in enemy_bases)
         ]

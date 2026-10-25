@@ -75,7 +75,7 @@ class PatrolAndTravelTests(unittest.TestCase):
     def test_patrol_mines_nearby_edge_ore_but_does_not_target_center_ore(self):
         bot = Bot("Worker", "worker", "ours", (2, 2))
         state = PatrolOre(self.view)
-        self.ore(3, 3, 12)
+        self.ore(9, 9, 12)
         self.ore(2, 4, 3)
         for _ in range(3):
             state.update(self.view, "ours")
@@ -134,7 +134,10 @@ class PatrolAndTravelTests(unittest.TestCase):
         manager.calculate_actions(self.snapshot)
         self.assertEqual(manager._center_ids, {"center-a", "center-b"})
         self.assertEqual(sum(bot.state == "PatrolOre" for bot in manager.bots.values()), 4)
-        self.assertEqual({manager.bots[f"edge-{i}"].patrol_direction for i in range(4)}, {-1, 1})
+        sectors = sorted(manager.bots[f"edge-{i}"].patrol_sector for i in range(4))
+        self.assertEqual(sectors[0][0], 0)
+        self.assertEqual(sectors[-1][1], len(manager.states["PatrolOre"].circuit))
+        self.assertTrue(all(left[1] == right[0] for left, right in zip(sectors, sectors[1:])))
         self.view["units"].append(self.unit("aaa-new", 10, 9))
         self.view["turn"] = 380
         actions = manager.calculate_actions(self.snapshot)
@@ -170,7 +173,7 @@ class PatrolAndTravelTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "mine"})
         target = manager.bots["worker"].build_target.copy()
-        self.worker["inventory"]["gold"] = 8
+        self.worker["inventory"]["iron"] = 8
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "move")
         self.assertEqual(manager.bots["worker"].build_target, target)
 

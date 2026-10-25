@@ -18,6 +18,10 @@ class Bot:
         self.build_site: Coordinate | None = None
         self.build_requested = False
         self.build_in_center = False
+        self.build_planned = False
+        self.trade_from: str | None = None
+        self.ending = False
+        self.return_buffer = 0
         # A region index selects center mining; None selects perimeter patrol.
         self.search_area_index: int | None = None
         self.ore_search_scope: tuple | None = None
@@ -26,6 +30,8 @@ class Bot:
         self.ore_returning = False
         self.patrol_index: int | None = None
         self.patrol_direction = 1
+        self.patrol_sector: tuple[int, int] | None = None
+        self.patrol_cursor: int | None = None
         self.last_action_type: str | None = None
         self.movement_history: list[tuple[int, int]] = [coordinates]
         self.avoid_steps: dict[tuple[int, int], int] = {}

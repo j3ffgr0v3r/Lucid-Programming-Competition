@@ -1,11 +1,17 @@
 from copy import deepcopy
 import unittest
+from unittest.mock import patch
 
 from manager import Manager
 
 
 class OreCoordinationTests(unittest.TestCase):
     def setUp(self):
+        # These compact-map fixtures exercise construction behavior. Keep their
+        # quotas explicit; production quota scaling is tested separately.
+        quotas = patch.multiple("manager", BASE_TARGET_AREA=10, WORKER_TARGET_AREA=25)
+        quotas.start()
+        self.addCleanup(quotas.stop)
         self.view = {
             "turn": 1,
             "map": {"width": 9, "height": 9, "cells": [{"type": "empty"} for _ in range(81)]},
@@ -65,11 +71,11 @@ class OreCoordinationTests(unittest.TestCase):
 
     def test_reservations_use_remaining_capacity_and_refresh_after_banking(self):
         self.ore(5, 4, 3)
-        self.view["units"][0]["inventory"]["gold"] = 7
+        self.view["units"][0]["inventory"]["iron"] = 7
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["beta"].ore_target, (5, 4))
-        self.view["units"][0]["inventory"]["gold"] = 8
+        self.view["units"][0]["inventory"]["iron"] = 8
         self.view["turn"] += 1
         actions = manager.calculate_actions(self.snapshot)
         self.assertTrue(manager.bots["alpha"].ore_returning)
@@ -85,14 +91,14 @@ class OreCoordinationTests(unittest.TestCase):
         self.assertEqual(actions["beta"], {"type": "mine"})
         self.assertEqual(manager.bots["alpha"].ore_target, (4, 6))
 
-    def test_builder_and_iron_state_share_deposit_reservations(self):
+    def test_construction_gatherers_share_deposit_reservations(self):
         self.view["bases"] = self.view["bases"][:1]
         self.view["units"][1]["position"] = {"x": 3, "y": 3}
         self.ore(4, 3, 2, "iron")
         self.ore(1, 0, 8, "iron")
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
-        self.assertEqual(manager.bots["alpha"].state, "BuildBase")
+        self.assertEqual(manager.bots["alpha"].state, "FindAnyOreState")
         self.assertEqual(manager.bots["alpha"].ore_target, (4, 3))
         self.assertEqual(manager.bots["beta"].ore_target, (1, 0))
 

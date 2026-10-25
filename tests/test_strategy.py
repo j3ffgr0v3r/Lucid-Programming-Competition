@@ -10,6 +10,11 @@ from manager import Manager
 
 class StrategyTests(unittest.TestCase):
     def setUp(self):
+        # These compact-map fixtures exercise construction behavior. Keep their
+        # quotas explicit; production quota scaling is tested separately.
+        quotas = patch.multiple("manager", BASE_TARGET_AREA=10, WORKER_TARGET_AREA=25)
+        quotas.start()
+        self.addCleanup(quotas.stop)
         self.view = {
             "turn": 1,
             "map": {"width": 9, "height": 9, "cells": [{"type": "empty"} for _ in range(81)]},
@@ -37,12 +42,14 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         actions = manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["center"].state, "BuildBase")
-        self.assertEqual(actions["center"], {"type": "build-base"})
-        self.assertEqual(manager.bots["center"].build_target, {"x": 4, "y": 4})
-        self.assertEqual(manager.bots["north"].state, "FindIronState")
+        self.assertEqual(actions["center"]["type"], "move")
+        target = manager.bots["center"].build_target
+        self.assertTrue(manager.base_planner.in_center((target["x"], target["y"])))
+        self.assertTrue(manager.bots["center"].build_planned)
+        self.assertEqual(manager.bots["north"].state, "FindAnyOreState")
         self.assertEqual(manager.bots["south"].state, "PatrolOre")
         self.assertEqual(manager._center_ids, {"center", "north"})
-        self.assertEqual(manager.states["PatrolOre"].resource, "iron")
+        self.assertIsNone(manager.states["PatrolOre"].resource)
 
     def test_builder_falls_back_to_nearest_any_ore_and_resumes_building(self):
         self.view["teamResources"]["ours"]["iron"] = 5
@@ -51,9 +58,12 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         actions = manager.calculate_actions(self.snapshot)
         self.assertEqual(actions["center"], {"type": "move", "direction": "north"})
-        self.assertEqual(manager.bots["center"].state, "BuildBase")
-        self.assertEqual(manager.bots["center"].build_target, {"x": 4, "y": 4})
+        self.assertEqual(manager.bots["center"].state, "FindAnyOreState")
+        self.assertIsNone(manager.bots["center"].build_target)
         self.view["teamResources"]["ours"]["iron"] = 6
+        manager.calculate_actions(self.snapshot)
+        self.assertEqual(manager.bots["center"].state, "BuildBase")
+        self.view["units"][0]["position"] = manager.bots["center"].build_target.copy()
         self.assertEqual(manager.calculate_actions(self.snapshot)["center"], {"type": "build-base"})
 
     def test_after_three_friendly_bases_two_search_center_and_others_patrol_for_any_ore(self):
@@ -96,8 +106,9 @@ class StrategyTests(unittest.TestCase):
         self.view["units"][1]["position"] = {"x": 4, "y": 4}
         manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["center"].state, "BuildBase")
-        self.assertEqual(manager.bots["north"].state, "FindIronState")
+        self.assertEqual(manager.bots["north"].state, "FindAnyOreState")
         self.view["units"] = self.view["units"][1:]
+        self.view["units"].append(self.worker("replacement", 0, 0))
         manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["north"].state, "BuildBase")
 
@@ -106,8 +117,8 @@ class StrategyTests(unittest.TestCase):
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
         original = {name: manager.bots[name].search_area_index for name in ("north", "south")}
-        self.view["teamResources"]["ours"]["iron"] = 11
-        self.assertEqual(manager.calculate_actions(self.snapshot)["north"]["type"], "spawn")
+        self.view["teamResources"]["ours"]["iron"] = 17  # Reserve six for the builder.
+        self.assertEqual(manager.calculate_actions(self.snapshot)["south"]["type"], "spawn")
         self.view["units"].append(self.worker("aaa-new", 0, 0))
         self.view["teamResources"]["ours"]["iron"] = 0
         manager.calculate_actions(self.snapshot)

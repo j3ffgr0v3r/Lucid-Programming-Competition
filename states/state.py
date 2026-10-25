@@ -83,6 +83,7 @@ class State(ABC):
         deviations = {origin: 0}
         previous = {}
         queue = [(0, 0, origin)]
+        width, height, cells = self.grid["width"], self.grid["height"], self.grid["cells"]
         while queue:
             cost, deviation, point = heappop(queue)
             if (cost, deviation) != (distances[point], deviations[point]):
@@ -92,10 +93,14 @@ class State(ABC):
                     if dx == dy == 0:
                         continue
                     neighbor = (point[0] + dx, point[1] + dy)
+                    x, y = neighbor
+                    if not (0 <= x < width and 0 <= y < height):
+                        continue
                     if allowed_cells is not None and neighbor not in allowed_cells:
                         continue
-                    cell = self._cell({"x": neighbor[0], "y": neighbor[1]})
-                    if cell is None or cell["type"] == "void" or neighbor in blocked:
+                    # Dijkstra's generated neighbors are already integers.
+                    cell = cells[y * width + x]
+                    if cell["type"] == "void" or neighbor in blocked:
                         continue
                     if cell["type"] == "hidden" and not allow_hidden:
                         continue

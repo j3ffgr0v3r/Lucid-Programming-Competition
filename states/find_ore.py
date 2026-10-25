@@ -67,12 +67,12 @@ class FindOreState(State):
         }
         # Remembered ore can be reached across unexplored gaps. Replan each turn
         # as terrain becomes visible, while retaining the selected destination.
-        distances, previous = self._routes(bot.coordinates, enemy_bases, allow_hidden=True)
+        distances, previous = self._ore_routes(bot, enemy_bases)
         ores = set()
         for index, cell in enumerate(self.grid["cells"]):
             if cell["type"] not in ("iron", "gold") or cell.get("amount", 0) <= 0:
                 continue
-            if self.resource is not None and cell["type"] != self.resource:
+            if not self._resource_allowed(cell):
                 continue
             point = (index % self.grid["width"], index // self.grid["width"])
             if point not in distances or not self._ore_allowed(point, bot, bounds):
@@ -103,7 +103,7 @@ class FindOreState(State):
             bot.ore_target = bot.coordinates
         elif bot.ore_target not in ores:
             bot.ore_target = min(
-                ores, key=lambda point: (distances[point], point[1], point[0]), default=None
+                ores, key=lambda point: self._ore_priority(point, distances), default=None
             )
         if bot.ore_target is not None:
             self.ore_reservations.setdefault(bot.ore_target, {})[bot.id] = min(
@@ -128,12 +128,13 @@ class FindOreState(State):
         cell = self.grid["cells"][point[1] * self.grid["width"] + point[0]]
         mining_turns = 1
         trade_turns = 0
-        if bot.state == "Trade":
-            if cell["type"] == "iron":
+        conversion = bot.trade_from or ("iron" if bot.state == "Trade" else None)
+        if conversion is not None:
+            if conversion == "iron" and cell["type"] == "iron":
                 # One or two iron alone cannot produce banked gold. Account
                 # for enough mining to complete a batch of three.
                 mining_turns = 3 - inventory["iron"] % 3
-            trade_turns = (inventory["iron"] + (mining_turns if cell["type"] == "iron" else 0)) // 3
+            trade_turns = (inventory[conversion] + (mining_turns if cell["type"] == conversion else 0)) // 3
         if mining_turns > amount or mining_turns > capacity - sum(inventory.values()):
             return False
 
@@ -151,7 +152,7 @@ class FindOreState(State):
             # Banking may leave a patrol's perimeter to take the fastest route.
             distances, _ = State._routes(self, home, enemy_bases, allow_hidden=True)
             return_turns = min(return_turns, distances.get(point, float("inf")))
-        return travel_turns + mining_turns + trade_turns + return_turns + 1 <= self.turns_left
+        return travel_turns + mining_turns + trade_turns + return_turns + 1 + bot.return_buffer <= self.turns_left
 
     def _bank_action(self, bot: Bot) -> Action:
         bot.ore_returning = True
@@ -225,6 +226,15 @@ class FindOreState(State):
 
     def _ore_allowed(self, point, bot, bounds) -> bool:
         return self._inside(point, bounds)
+
+    def _resource_allowed(self, cell) -> bool:
+        return self.resource is None or cell["type"] == self.resource
+
+    def _ore_priority(self, point, distances):
+        return distances[point], point[1], point[0]
+
+    def _ore_routes(self, bot, enemy_bases):
+        return self._routes(bot.coordinates, enemy_bases, allow_hidden=True)
 
     def _area_bounds(self) -> tuple[int, int, int, int] | None:
         if self.area is None:

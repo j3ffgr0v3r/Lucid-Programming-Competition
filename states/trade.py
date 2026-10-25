@@ -17,7 +17,7 @@ class Trade(State):
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
         carried = inventory["gold"] + inventory["iron"]
         bank = self.states.get("Bank")
-        search_state = "CenterOre" if bot.search_area_index is not None else "PatrolOre"
+        search_state = "CenterOre" if bot.search_area_index is not None else "SectorOre"
         at_base = any(
             base["teamId"] == bot.team_id
             and (base["position"]["x"], base["position"]["y"]) == bot.coordinates

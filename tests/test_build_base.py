@@ -200,7 +200,8 @@ class BuildBaseTests(unittest.TestCase):
         self.state.assign(self.bot, {"x": 3, "y": 2}, center_only=True)
         step, action = self.act()
         self.assertEqual(action["type"], "move")
-        self.assertEqual(self.bot.build_target, {"x": 3, "y": 2})
+        self.assertIn(self.bot.build_target["x"], range(2, 5))
+        self.assertIn(self.bot.build_target["y"], range(1, 4))
         self.assertIsNone(self.bot.build_site)
         self.assertIsNotNone(step)
 

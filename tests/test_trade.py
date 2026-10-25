@@ -7,6 +7,10 @@ from manager import Manager
 
 class TradeTests(unittest.TestCase):
     def setUp(self):
+        # Leave room to recruit on this small map when testing the time cutoff.
+        quota = patch("manager.WORKER_TARGET_AREA", 25)
+        quota.start()
+        self.addCleanup(quota.stop)
         self.worker = {
             "unitId": "worker", "teamId": "ours", "position": {"x": 0, "y": 0},
             "readyOnTurn": 1, "inventoryCapacity": 8, "inventory": {"gold": 0, "iron": 6},
@@ -23,9 +27,10 @@ class TradeTests(unittest.TestCase):
         self.identity = {"teamId": "ours", "displayName": "Test"}
 
     def test_exact_cutoff_disables_spawning_and_building(self):
+        self.view["turn"] = 287
         manager = Manager(self.snapshot, self.identity)
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "spawn"})
-        self.view["turn"] = 380
+        self.view["turn"] = 288
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "trade", "from": "iron"})
         self.assertEqual(manager.bots["worker"].state, "Trade")
         self.view["turn"] = 479
@@ -36,9 +41,10 @@ class TradeTests(unittest.TestCase):
         self.view["turn"] = 200
         manager = Manager(self.snapshot, self.identity)
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "trade")
-        with patch("manager.TRADE_TURNS_LEFT", 50):
+        with patch("manager.CONSTRUCTION_FRACTION", 0.75):
+            manager = Manager(self.snapshot, self.identity)
             self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "spawn")
-            self.view["turn"] = 250
+            self.view["turn"] = 225
             self.assertEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "trade")
 
     def test_trade_repeats_until_iron_converted_then_banks_and_searches_center(self):

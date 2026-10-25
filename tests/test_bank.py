@@ -48,6 +48,7 @@ class BankTests(unittest.TestCase):
         self.view["map"]["cells"][2] = {"type": "hidden"}
         snapshot = {"match": {"matchId": "test"}, "view": self.view}
         manager = Manager(snapshot, {"teamId": "ours", "displayName": "Test"})
+        manager.base_target = 2  # Keep this cargo-return test in construction.
         bank = manager.states["Bank"]
         with patch.object(bank, "next_action", wraps=bank.next_action) as request:
             actions = manager.calculate_actions(snapshot)

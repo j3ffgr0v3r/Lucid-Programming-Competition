@@ -6,18 +6,25 @@ from collections.abc import Iterator
 from importlib import import_module
 from inspect import getmembers, isabstract, isclass
 from pkgutil import iter_modules
+from math import ceil
 
 import states
 import ore_fallback
 from bot import Bot
+from base_planner import BasePlanner, CENTER_BASE_MIN, CENTER_BASE_MAX
 from bot_client import ActionsByEntity, BotState, Identity, mars_view
 from map_state import MapState
 from states.state import State
 from states.patrol_ore import PatrolOre
 from states.trade import BANK_TURN_BUFFER
+from states.ending import Ending
 
 
-TRADE_TURNS_LEFT = 100
+CONSTRUCTION_FRACTION = 3 / 5
+BASE_TARGET_AREA = 100
+WORKER_TARGET_AREA = 250
+ENDING_RETURN_BUFFER = 2
+ENDING_MIN_TURNS = 3
 CENTER_SEARCH_BUFFER = 3
 CENTER_BOT_COUNT = 2
 LOOP_AVOID_TURNS = 4
@@ -42,14 +49,20 @@ class Manager:
         self.team_id = identity["teamId"]
         self.match_id = game_state["match"]["matchId"]
         self.max_turns = game_state["match"].get("maxTurns", 480)
+        self.phase = "construction"
+        self.construction_end_turn = ceil(self.max_turns * CONSTRUCTION_FRACTION)
+        self.base_target = max(1, ceil(view["map"]["width"] * view["map"]["height"] / BASE_TARGET_AREA))
+        self.worker_target = max(1, ceil(view["map"]["width"] * view["map"]["height"] / WORKER_TARGET_AREA))
         self.bots: dict[str, Bot] = {}
-        self._builder_id: str | None = None
         self._center_ids: set[str] = set()
+        self._patrol_order: list[str] = []
+        self._build_assignments: dict[str, tuple[int, int]] = {}
         self._bot_costs = bot_costs()
         self._recruited_workers = 0
         self.next_bot_cost = next(self._bot_costs)
         self.map_state = MapState(view)
         self.game_map = self.map_state.map
+        self.base_planner = BasePlanner(self.map_state)
 
         # Discover the team's implementations before choosing any fallbacks.
         state_classes = {}
@@ -67,6 +80,7 @@ class Manager:
                         raise ValueError(f"Duplicate state class name: {name}")
                     state_classes[name] = state_class
         state_classes.setdefault("PatrolOre", PatrolOre)
+        state_classes.setdefault("Ending", Ending)
 
         ore_names = ("FindAnyOreState", "FindIronState", "FindGoldState")
         for name in ore_names:
@@ -102,101 +116,146 @@ class Manager:
             state.states = self.states
 
     def strategize(self):
-        """Recruit first, build center bases, and split center/perimeter searches."""
-        if self.max_turns - self.turn <= TRADE_TURNS_LEFT:
+        """Build the network, mine for gold, then return each rover in time."""
+        our_bases = [b for b in self.map_state.bases if b["teamId"] == self.team_id]
+        if self.phase == "construction" and (
+            self.turn >= self.construction_end_turn
+            or (len(our_bases) >= self.base_target and len(self.bots) >= self.worker_target)
+        ):
+            self.phase = "mining"
+            self._build_assignments.clear()
+        self._assign_search_roles()
+        self.states["PatrolOre"].resource = None
+        remaining = self.max_turns - self.turn
+        for bot in self.bots.values():
+            worker = self.workers[bot.id]
+            bank_turns = self.states["Bank"].turns_to_bank(bot)
+            cooldown = max(0, worker["readyOnTurn"] - self.turn)
+            conversions = worker.get("inventory", {}).get("iron", 0) // 3
+            return_budget = (bank_turns if bank_turns is not None else 0) + cooldown + conversions + ENDING_RETURN_BUFFER
+            bot.ending = bot.ending or remaining <= max(ENDING_MIN_TURNS, return_budget)
+            bot.trade_from = "gold" if self.phase == "construction" and not bot.ending else "iron"
+            bot.return_buffer = ENDING_RETURN_BUFFER
+            bot.set_state("Ending" if bot.ending else (
+                "Trade" if self.phase != "construction" else
+                "FindAnyOreState" if bot.id in self._center_ids else "PatrolOre"
+            ))
+        if self.bots and all(bot.ending for bot in self.bots.values()):
+            self.phase = "ending"
+        if self.phase != "construction":
             self.states["BuildBase"].set_iron_budget(0)
-            self._assign_search_roles()
-            self.states["PatrolOre"].resource = None
-            for bot in self.bots.values():
-                bot.set_state("Trade")
             return
 
-        center = {"x": self.game_map["width"] // 2, "y": self.game_map["height"] // 2}
-        our_bases = [base for base in self.map_state.bases if base["teamId"] == self.team_id]
-
-        # Forecast prices without advancing the confirmed-recruit generator.
+        self._build_assignments = {
+            uid: point for uid, point in self._build_assignments.items()
+            if uid in self.bots and not self.bots[uid].ending
+            and self.base_planner.legal(point, self.team_id)
+        }
+        iron = self.bank["iron"]
+        # Bootstrap the first few rovers, then reserve base funding so growing
+        # worker prices cannot consume every deposit before a depot is built.
+        build_slots = min(max(1, len(self.bots) // 3), max(0, self.base_target - len(our_bases)), iron // 6)
+        if len(self.bots) < min(3 + len(our_bases) // 3, self.worker_target):
+            build_slots = 0
+        assigned = []
+        for uid in sorted(self._build_assignments):
+            if len(assigned) >= build_slots:
+                break
+            assigned.append(uid)
+        while len(assigned) < build_slots:
+            reserved = [self._build_assignments[uid] for uid in assigned]
+            center_count = sum(self.base_planner.in_center((b["position"]["x"], b["position"]["y"])) for b in our_bases)
+            center_count += sum(self.base_planner.in_center(p) for p in reserved)
+            outside_count = len(our_bases) + len(reserved) - center_count
+            prefer_center = center_count < CENTER_BASE_MIN or (center_count < CENTER_BASE_MAX and outside_count >= 2)
+            selected = self._new_build_assignment(assigned, reserved, prefer_center, center_count)
+            if selected is None:
+                break
+            uid, point = selected
+            self._build_assignments[uid] = point
+            assigned.append(uid)
+            self.states["BuildBase"].assign(
+                self.bots[uid], {"x": point[0], "y": point[1]},
+                center_only=self.base_planner.in_center(point), planned=True,
+            )
+        for uid in assigned:
+            self.bots[uid].set_state("BuildBase")
+        iron -= 6 * len(assigned)
         prices = bot_costs()
         for _ in range(self._recruited_workers):
             next(prices)
-        next_price = next(prices)
-        remaining_iron = self.bank["iron"]
-        spawners = set()
-        ready = [bot for bot in self.bots.values() if self.workers[bot.id]["readyOnTurn"] <= self.turn]
-        # Prefer outer workers, leaving a central worker free to build if possible.
-        ready.sort(key=lambda bot: (-((bot.coordinates[0] - center["x"]) ** 2
-                                     + (bot.coordinates[1] - center["y"]) ** 2), bot.id))
+        price = next(prices)
+        recruits = 0
+        ready = sorted((bot for bot in self.bots.values()
+                        if bot.id not in assigned and not bot.ending
+                        and self.workers[bot.id]["readyOnTurn"] <= self.turn),
+                       key=lambda bot: (bot.id in self._center_ids, bot.id))
         for bot in ready:
-            if remaining_iron < next_price:
+            if len(self.bots) + recruits >= self.worker_target or iron < price:
                 break
-            spawners.add(bot.id)
-            remaining_iron -= next_price
-            next_price = next(prices)
-        self.states["BuildBase"].set_iron_budget(remaining_iron)
+            bot.set_state("SpawnBot")
+            recruits += 1
+            iron -= price
+            price = next(prices)
+        self.states["BuildBase"].set_iron_budget(6 * len(assigned))
 
-        builder = None
-        available = [bot for bot in self.bots.values() if bot.id not in spawners]
-        if len(our_bases) < 3 and available:
-            # Keep a builder through mining and banking trips even when another
-            # rover becomes closer to the center. Replace only when unavailable.
-            builder = next((bot for bot in available if bot.id == self._builder_id), None)
-            builder = builder or min(
-                available,
-                key=lambda bot: ((bot.coordinates[0] - center["x"]) ** 2
-                                 + (bot.coordinates[1] - center["y"]) ** 2, bot.id),
-            )
-            self._builder_id = builder.id
-        elif len(our_bases) >= 3:
-            self._builder_id = None
+    def _new_build_assignment(self, assigned, reserved, prefer_center, center_count):
+        planner, build = self.base_planner, self.states["BuildBase"]
+        enemies = {(b["position"]["x"], b["position"]["y"])
+                   for b in self.map_state.bases if b["teamId"] != self.team_id}
+        available = [bot for bot in self.bots.values() if bot.id not in assigned and not bot.ending]
+        occupied = {}
+        for unit in build.view["units"]:
+            point = (unit["position"]["x"], unit["position"]["y"])
+            occupied.setdefault(point, set()).add(unit["unitId"])
+        for center in (prefer_center, not prefer_center):
+            if center and center_count >= CENTER_BASE_MAX:
+                continue
+            candidates = [bot for bot in available if (bot.id in self._center_ids) == center]
+            if not candidates:
+                continue
+            routes = {bot.id: build._routes(bot.coordinates, enemies, allow_hidden=True)[0] for bot in candidates}
+            for point in planner.ranked_sites(self.team_id, center=center, reserved=reserved):
+                eligible = [bot for bot in candidates
+                            if point in routes[bot.id]
+                            and not (occupied.get(point, set()) - {bot.id})
+                            and (center or self.states["PatrolOre"].in_sector(point, bot))
+                            and routes[bot.id][point] + 1 < self.construction_end_turn - self.turn]
+                if eligible:
+                    bot = min(eligible, key=lambda bot: (routes[bot.id][point], bot.id))
+                    return bot.id, point
+        return None
 
-        ore_state_name = "FindIronState" if len(our_bases) < 3 else "FindAnyOreState"
-        self._assign_search_roles(builder)
-        self.states["PatrolOre"].resource = "iron" if len(our_bases) < 3 else None
-        for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
-            if bot.id in spawners:
-                bot.set_state("SpawnBot")
-            elif bot is builder:
-                confirmed = bot.build_requested and any(
-                    base["position"] == bot.build_site for base in our_bases
-                )
-                if bot.build_target is None or not bot.build_in_center or confirmed:
-                    self.states["BuildBase"].assign(bot, center, center_only=True)
-                bot.set_state("BuildBase")
-            else:
-                bot.set_state(ore_state_name if bot.id in self._center_ids else "PatrolOre")
-
-    def _assign_search_roles(self, builder=None):
-        """Keep two center rovers, counting the builder, and spread patrol starts."""
-        selected = {builder.id} if builder is not None else set()
+    def _assign_search_roles(self):
+        """Keep two center rovers and give every outside rover its own arc."""
         center = (self.game_map["width"] // 2, self.game_map["height"] // 2)
         candidates = sorted(self.bots.values(), key=lambda bot: (
             bot.id not in self._center_ids,
             (bot.coordinates[0] - center[0]) ** 2 + (bot.coordinates[1] - center[1]) ** 2,
             bot.id,
         ))
-        for bot in candidates:
-            if len(selected) >= CENTER_BOT_COUNT:
-                break
-            selected.add(bot.id)
-        self._center_ids = selected
+        self._center_ids = {bot.id for bot in candidates[:CENTER_BOT_COUNT]}
+        outside = set(self.bots) - self._center_ids
         patrol = self.states["PatrolOre"]
-        counts = [0] * len(patrol.waypoints)
+        order = [uid for uid in self._patrol_order if uid in outside]
+        order.extend(sorted(outside - set(order), key=lambda uid: (patrol.sector_index(self.bots[uid].coordinates), uid)))
+        self._patrol_order = order
         for bot in self.bots.values():
-            if bot.id not in selected and bot.patrol_index is not None:
-                counts[bot.patrol_index] += 1
-        for bot in sorted(self.bots.values(), key=lambda bot: bot.id):
-            bot.search_area_index = self.center_area_index if bot.id in selected else None
-            if bot.id not in selected and bot.patrol_index is None:
-                bot.patrol_index = min(range(len(counts)), key=lambda index: (
-                    counts[index],
-                    max(abs(patrol.waypoints[index][0] - bot.coordinates[0]),
-                        abs(patrol.waypoints[index][1] - bot.coordinates[1])), index,
-                ))
-                bot.patrol_direction = 1 if sum(counts) % 2 == 0 else -1
-                counts[bot.patrol_index] += 1
+            bot.search_area_index = self.center_area_index if bot.id in self._center_ids else None
+            if bot.id in self._center_ids:
+                bot.patrol_sector = None
+        for i, uid in enumerate(order):
+            bot = self.bots[uid]
+            sector = (i * len(patrol.circuit) // len(order), (i + 1) * len(patrol.circuit) // len(order))
+            if bot.patrol_sector != sector:
+                bot.patrol_sector = sector
+                bot.patrol_cursor = None
+                bot.ore_target = None
+            bot.patrol_direction = bot.patrol_direction or 1
 
     def _mine_on_the_way(self, bot, worker, action):
         """Pause travel to mine underfoot while preserving the assigned trip."""
-        if action["type"] != "move":
+        if action["type"] != "move" or bot.ending:
             return action
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
         room = worker.get("inventoryCapacity", 8) - sum(inventory.values())
@@ -210,7 +269,7 @@ class Manager:
         }
         if owners and self.team_id not in owners:
             return action
-        if self.max_turns - self.turn <= TRADE_TURNS_LEFT:
+        if self.phase != "construction":
             bank_turns = self.states["Bank"].turns_to_bank(bot)
             trades = (inventory["iron"] + (cell["type"] == "iron")) // 3
             if bank_turns is None or self.max_turns - self.turn <= bank_turns + trades + BANK_TURN_BUFFER + 1:
@@ -318,8 +377,12 @@ class Manager:
                 state = self.states[bot.state]
                 if bot.state in self.ore_states and bot.search_area_index is not None:
                     state = self.ore_states[bot.state][bot.search_area_index]
-                result = state.next_action(bot)
-                action = result[1] if isinstance(result, tuple) else result
+                inventory = workers[unit_id].get("inventory", {"gold": 0, "iron": 0})
+                if self.phase == "construction" and not bot.ending and bot.state != "SpawnBot" and inventory["gold"] >= 3:
+                    action = {"type": "trade", "from": "gold"}
+                else:
+                    result = state.next_action(bot)
+                    action = result[1] if isinstance(result, tuple) else result
                 actions[unit_id] = self._mine_on_the_way(bot, workers[unit_id], action)
                 # Coordinates come from the next server snapshot, not the
                 # requested destination: movement may fail or be interrupted.

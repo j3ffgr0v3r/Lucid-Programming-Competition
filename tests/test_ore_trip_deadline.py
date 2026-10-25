@@ -1,10 +1,17 @@
 import unittest
+from unittest.mock import patch
 
 from manager import Manager
 
 
 class OreTripDeadlineTests(unittest.TestCase):
     def setUp(self):
+        # Exercise exact trip arithmetic independently of the configurable
+        # safety margin, covered by the phase/ending integration tests.
+        for name, value in (("ENDING_RETURN_BUFFER", 0), ("ENDING_MIN_TURNS", 1)):
+            setting = patch("manager." + name, value)
+            setting.start()
+            self.addCleanup(setting.stop)
         self.worker = {
             "unitId": "worker", "teamId": "ours", "position": {"x": 3, "y": 3},
             "readyOnTurn": 1, "inventoryCapacity": 8, "inventory": {"gold": 0, "iron": 0},
@@ -132,6 +139,7 @@ class OreTripDeadlineTests(unittest.TestCase):
         self.assertNotEqual(manager.calculate_actions(self.snapshot)["worker"]["type"], "mine")
         self.cells[3] = {"type": "empty"}
         self.view["bases"].append({"baseId": "near", "teamId": "ours", "position": {"x": 3, "y": 0}})
+        manager = Manager(self.snapshot, self.identity)
         self.assertEqual(manager.calculate_actions(self.snapshot)["worker"], {"type": "mine"})
         self.finish(manager)
         self.assertGreater(self.view["teamResources"]["ours"]["gold"], 0)

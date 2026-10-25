@@ -31,6 +31,7 @@ class BuildBase(State):
         self._remaining_iron = 0
         self._ore_searches = {}
         self._blocked_builders: set[str] = set()
+        self._expanded_searches: set[str] = set()
 
     def update(self, view: MarsView, team_id: str) -> None:
         super().update(view, team_id)
@@ -38,10 +39,10 @@ class BuildBase(State):
         self._remaining_iron = view["teamResources"][team_id]["iron"]
 
     def set_iron_budget(self, iron: int) -> None:
-        """Use only the bank iron left after higher-priority spawn orders."""
+        """Use only the bank iron reserved for assigned builders."""
         self._remaining_iron = max(0, iron)
 
-    def assign(self, bot: Bot, target: Coordinate, *, center_only: bool = False) -> None:
+    def assign(self, bot: Bot, target: Coordinate, *, center_only: bool = False, planned: bool = False) -> None:
         """Start a new build task without changing another bot's target."""
         if self._cell(target) is None:
             raise ValueError("The base target must be an integer coordinate on the map.")
@@ -49,8 +50,10 @@ class BuildBase(State):
         bot.build_site = None
         bot.build_requested = False
         bot.build_in_center = center_only
+        bot.build_planned = planned
         self._ore_searches.pop(bot.id, None)
         self._blocked_builders.discard(bot.id)
+        self._expanded_searches.discard(bot.id)
         bot.set_state("BuildBase")
 
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
@@ -90,9 +93,9 @@ class BuildBase(State):
             for unit in self.view["units"] if unit["unitId"] != bot.id
         }
         reserved = {point for unit_id, point in self._reserved_sites.items() if unit_id != bot.id}
-        distances, previous = self._routes(origin, enemy_bases, allow_hidden=bot.build_in_center)
+        distances, previous = self._routes(origin, enemy_bases, allow_hidden=bot.build_in_center or bot.build_planned)
 
-        if bot.build_in_center:
+        if bot.build_in_center and not bot.build_planned:
             area = self.view["highGoldArea"]
             width = min(self.grid["width"], area["width"])
             height = min(self.grid["height"], area["height"])
@@ -111,7 +114,7 @@ class BuildBase(State):
             friendly = [point for point, base in bases.items() if base["teamId"] == self.team_id]
             center_tiles = {
                 (x, y) for y in range(top, top + height) for x in range(left, left + width)
-                if self._cell({"x": x, "y": y})["type"] != "void"
+                if self._cell({"x": x, "y": y})["type"] in ("empty", "gold", "iron")
             }
             claimed = {
                 point for point in center_tiles
@@ -139,6 +142,7 @@ class BuildBase(State):
 
         if target_cell is not None and target_cell["type"] == "hidden":
             self._blocked_builders.discard(bot.id)
+            self._expanded_searches.discard(bot.id)
             # Move toward unexplored space without treating fog as empty land.
             destination = min(
                 distances,
@@ -151,7 +155,7 @@ class BuildBase(State):
 
         candidates = [
             point for point in distances
-            if (not bot.build_in_center or point == target)
+            if (not (bot.build_in_center or bot.build_planned) or point == target)
             and self._cell({"x": point[0], "y": point[1]})["type"] == "empty"
             and point not in bases and point not in occupied and point not in reserved
             and all(abs(point[0] - x) + abs(point[1] - y) > 2 for x, y in enemy_bases)
@@ -160,6 +164,7 @@ class BuildBase(State):
             return self._collect_while_blocked(bot, worker)
 
         self._blocked_builders.discard(bot.id)
+        self._expanded_searches.discard(bot.id)
         destination = min(
             candidates,
             key=lambda point: (abs(point[0] - target[0]) + abs(point[1] - target[1]),
@@ -189,6 +194,7 @@ class BuildBase(State):
         template = self.states.get("FindAnyOreState")
         if template is None:
             return None, {"type": "pass"}
+        expanded = blocked or bot.id in self._expanded_searches
         target = bot.build_site or bot.build_target
         left, top = max(0, target["x"] - 2), max(0, target["y"] - 2)
         right = min(self.grid["width"], target["x"] + 3)
@@ -199,7 +205,7 @@ class BuildBase(State):
             height = min(self.grid["height"], rich["height"])
             center_left = (self.grid["width"] - width) // 2
             center_top = (self.grid["height"] - height) // 2
-            if blocked:
+            if expanded:
                 # A blocked center pocket may contain no eligible ore at all.
                 # Keep collecting in the center and its immediate surroundings.
                 left = max(0, center_left - BLOCKED_SEARCH_BUFFER)
@@ -254,5 +260,11 @@ class BuildBase(State):
             return self._move(bot.coordinates, destination, previous)
 
         result = ore_state.next_action(bot)
-        return result if isinstance(result, tuple) else (None, result)
+        result = result if isinstance(result, tuple) else (None, result)
+        if result[1]["type"] == "pass" and bot.build_in_center and not expanded and not carried:
+            # The original pocket has no useful work. Expand once and retain
+            # the wider target on later turns instead of repeatedly resetting it.
+            self._expanded_searches.add(bot.id)
+            return self._find_ore_near_target(bot, worker, blocked=blocked)
+        return result
 

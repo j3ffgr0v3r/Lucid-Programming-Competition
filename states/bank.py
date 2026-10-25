@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from heapq import heappop, heappush
+from heapq import heapify, heappop, heappush
 
 from bot import Bot
 from bot_client import (
@@ -24,15 +24,36 @@ class Bank(State):
         if self.view is None or bot.team_id is None:
             return None
         bases = self.map_state.bases if self.map_state is not None else self.view["bases"]
-        start = {"x": bot.coordinates[0], "y": bot.coordinates[1]}
-        costs = []
-        for base in bases:
-            if base["teamId"] != bot.team_id:
-                continue
-            path = self._path_through_hidden(self.grid, start, base["position"], bases, bot.team_id)
-            if path is not None:
-                costs.append(self._path_cost(self.grid, path, hidden_penalty=HIDDEN_TERRAIN_PENALTY) + 1)
-        return min(costs, default=None)
+        key = ("bank_return_costs", bot.team_id)
+        if key not in self._route_cache:
+            # One reverse search from every depot serves all workers. Reverse
+            # edges pay for entering the current tile, not the neighbor.
+            width, height = self.grid["width"], self.grid["height"]
+            blocked = {(b["position"]["x"], b["position"]["y"])
+                       for b in bases if b["teamId"] != bot.team_id}
+            costs = {(b["position"]["x"], b["position"]["y"]): 1
+                     for b in bases if b["teamId"] == bot.team_id}
+            queue = [(cost, point) for point, cost in costs.items()]
+            heapify(queue)
+            while queue:
+                cost, point = heappop(queue)
+                if costs[point] != cost:
+                    continue
+                kind = self.grid["cells"][point[1] * width + point[0]]["type"]
+                step = OBSTACLE_COST if kind in ("mountain", "crater") else 1 + (HIDDEN_TERRAIN_PENALTY if kind == "hidden" else 0)
+                for dy in range(-1, 2):
+                    for dx in range(-1, 2):
+                        neighbor = (point[0] + dx, point[1] + dy)
+                        x, y = neighbor
+                        if not (dx or dy) or not (0 <= x < width and 0 <= y < height):
+                            continue
+                        if neighbor in blocked or self.grid["cells"][y * width + x]["type"] == "void":
+                            continue
+                        if cost + step < costs.get(neighbor, float("inf")):
+                            costs[neighbor] = cost + step
+                            heappush(queue, (cost + step, neighbor))
+            self._route_cache[key] = costs
+        return self._route_cache[key].get(bot.coordinates)
 
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
         team_id = bot.team_id

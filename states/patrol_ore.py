@@ -26,6 +26,13 @@ class PatrolOre(FindOreState):
             (x, y) for y in range(top, bottom + 1) for x in range(left, right + 1)
             if x in (left, right) or y in (top, bottom)
         )
+        self.circuit = list(dict.fromkeys(
+            [(x, top) for x in range(left, right + 1)]
+            + [(right, y) for y in range(top + 1, bottom + 1)]
+            + [(x, bottom) for x in range(right - 1, left - 1, -1)]
+            + [(left, y) for y in range(bottom - 1, top, -1)]
+        ))
+        self._sector_indices = {}
         self.perimeter = frozenset(
             (x, y) for y in range(height) for x in range(width)
             if min(x, y, width - 1 - x, height - 1 - y) < PERIMETER_WIDTH
@@ -45,10 +52,35 @@ class PatrolOre(FindOreState):
         return self._bands[width]
 
     def _ore_allowed(self, point, bot, bounds) -> bool:
-        return point in self.perimeter and (
+        search_band = self._band(PATROL_WALL_DISTANCE + PATROL_ORE_RADIUS + 1)
+        return self.in_sector(point, bot) and point in search_band and (
             point == bot.ore_target
             or max(abs(point[0] - bot.coordinates[0]), abs(point[1] - bot.coordinates[1])) <= PATROL_ORE_RADIUS
         )
+
+    def sector_index(self, point):
+        if point not in self._sector_indices:
+            self._sector_indices[point] = min(range(len(self.circuit)), key=lambda index: (
+                (self.circuit[index][0] - point[0]) ** 2 + (self.circuit[index][1] - point[1]) ** 2, index
+            ))
+        return self._sector_indices[point]
+
+    def in_sector(self, point, bot):
+        return bot.patrol_sector is None or bot.patrol_sector[0] <= self.sector_index(point) < bot.patrol_sector[1]
+
+    def _resource_allowed(self, cell) -> bool:
+        # Construction makes iron preferable, not a reason to ignore nearby gold.
+        return cell["type"] in ("iron", "gold")
+
+    def _ore_priority(self, point, distances):
+        cell = self.grid["cells"][point[1] * self.grid["width"] + point[0]]
+        return (self.resource is not None and cell["type"] != self.resource, *super()._ore_priority(point, distances))
+
+    def _ore_routes(self, bot, enemy_bases):
+        # Collection may step to either side of the normal patrol lane. Keep
+        # the same search band throughout the trip so targets stay reachable.
+        width = max(PATROL_WALL_DISTANCE + PATROL_ORE_RADIUS + 1, self._edge_depth(bot.coordinates) + 1)
+        return self._routes(bot.coordinates, enemy_bases, allow_hidden=True, allowed_cells=self._band(width))
 
     def _routes(self, origin, enemy_bases, *, allow_hidden=False, allowed_cells=None, preferred_cells=None):
         # Keep a rover on the ring, or within its current detour depth until
@@ -62,7 +94,7 @@ class PatrolOre(FindOreState):
 
     def _checkpoint_route(self, bot, waypoint, distances, previous):
         def nearest(routes):
-            return min((point for point in routes if point in self.perimeter), key=lambda point: (
+            return min((point for point in routes if point in self.perimeter and self.in_sector(point, bot)), key=lambda point: (
                 max(abs(point[0] - waypoint[0]), abs(point[1] - waypoint[1])),
                 routes[point], point,
             ), default=None)
@@ -99,6 +131,34 @@ class PatrolOre(FindOreState):
         return detour_target, full_previous
 
     def _explore(self, bot, bounds, distances, previous):
+        enemy_bases = {
+            (base["position"]["x"], base["position"]["y"])
+            for base in self.view["bases"] if base["teamId"] != bot.team_id
+        }
+        # Search detours must not widen the route used for ordinary patrols.
+        distances, previous = self._routes(bot.coordinates, enemy_bases, allow_hidden=True)
+        if bot.patrol_sector is not None:
+            start, stop = bot.patrol_sector
+            if start >= stop:
+                return {"type": "pass"}
+            if bot.patrol_cursor is None or not start <= bot.patrol_cursor < stop:
+                bot.patrol_cursor = min(range(start, stop), key=lambda index: (
+                    max(abs(self.circuit[index][0] - bot.coordinates[0]), abs(self.circuit[index][1] - bot.coordinates[1])), index
+                ))
+            for _ in range(stop - start):
+                target, route = self._checkpoint_route(bot, self.circuit[bot.patrol_cursor], distances, previous)
+                if target is None:
+                    return {"type": "pass"}
+                if target != bot.coordinates:
+                    return self._move(bot.coordinates, target, route)[1]
+                if stop - start <= 2:
+                    return {"type": "pass"}
+                next_index = bot.patrol_cursor + bot.patrol_direction
+                if not start <= next_index < stop:
+                    bot.patrol_direction *= -1
+                    next_index = bot.patrol_cursor + bot.patrol_direction
+                bot.patrol_cursor = next_index
+            return {"type": "pass"}
         if bot.patrol_index is None:
             bot.patrol_index = min(range(len(self.waypoints)), key=lambda index: (
                 max(abs(self.waypoints[index][0] - bot.coordinates[0]),

@@ -6,6 +6,8 @@ from .find_ore import FindOreState
 PATROL_WALL_DISTANCE = 2
 PERIMETER_WIDTH = PATROL_WALL_DISTANCE + 1
 PATROL_ORE_RADIUS = 4
+PATROL_DETOUR_DEPTH = 2
+PATROL_OBSTACLE_LOOKAHEAD = 4
 
 
 class PatrolOre(FindOreState):
@@ -72,9 +74,10 @@ class PatrolOre(FindOreState):
         # Construction makes iron preferable, not a reason to ignore nearby gold.
         return cell["type"] in ("iron", "gold")
 
-    def _ore_priority(self, point, distances):
+    def _ore_priority(self, point, distances, bot=None, worker=None, amount=None):
         cell = self.grid["cells"][point[1] * self.grid["width"] + point[0]]
-        return (self.resource is not None and cell["type"] != self.resource, *super()._ore_priority(point, distances))
+        return (self.resource is not None and cell["type"] != self.resource,
+                *super()._ore_priority(point, distances, bot, worker, amount))
 
     def _ore_routes(self, bot, enemy_bases):
         # Collection may step to either side of the normal patrol lane. Keep
@@ -101,6 +104,25 @@ class PatrolOre(FindOreState):
 
         target = nearest(distances)
         if target == waypoint:
+            # Widen a connected route only when it actually crosses costly
+            # terrain. Ordinary open-ground patrols keep their usual lane.
+            step = target
+            costly = False
+            while step != bot.coordinates:
+                if self._cell({"x": step[0], "y": step[1]})["type"] in ("mountain", "crater", "hidden"):
+                    costly = True
+                    break
+                step = previous[step]
+            if costly:
+                enemies = {(b["position"]["x"], b["position"]["y"])
+                           for b in self.view["bases"] if b["teamId"] != bot.team_id}
+                width = max(PERIMETER_WIDTH + PATROL_DETOUR_DEPTH, self._edge_depth(bot.coordinates) + 1)
+                wider, route = super()._routes(
+                    bot.coordinates, enemies, allow_hidden=True,
+                    allowed_cells=self._band(width), preferred_cells=self.patrol_lane,
+                )
+                if wider.get(target, float("inf")) < distances[target]:
+                    return target, route
             return target, previous
         enemy_bases = {
             (base["position"]["x"], base["position"]["y"])
@@ -146,6 +168,22 @@ class PatrolOre(FindOreState):
                     max(abs(self.circuit[index][0] - bot.coordinates[0]), abs(self.circuit[index][1] - bot.coordinates[1])), index
                 ))
             for _ in range(stop - start):
+                # A checkpoint is for coverage, not a requirement to stand on
+                # a mountain. Look ahead within this arc to a cheaper tile.
+                for ahead in range(1, PATROL_OBSTACLE_LOOKAHEAD + 1):
+                    point = self.circuit[bot.patrol_cursor]
+                    if self._cell({"x": point[0], "y": point[1]})["type"] not in ("mountain", "crater"):
+                        break
+                    index = bot.patrol_cursor + bot.patrol_direction * ahead
+                    if not start <= index < stop:
+                        if stop - start > 1:
+                            bot.patrol_cursor -= bot.patrol_direction
+                            bot.patrol_direction *= -1
+                        break
+                    point = self.circuit[index]
+                    if self._cell({"x": point[0], "y": point[1]})["type"] in ("empty", "iron", "gold"):
+                        bot.patrol_cursor = index
+                        break
                 target, route = self._checkpoint_route(bot, self.circuit[bot.patrol_cursor], distances, previous)
                 if target is None:
                     return {"type": "pass"}

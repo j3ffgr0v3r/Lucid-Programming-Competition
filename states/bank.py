@@ -6,11 +6,9 @@ from bot_client import (
     Action,
     BaseLocation,
     Coordinate,
-    Direction,
     GameMap,
     SimpleAction,
 )
-from bot_template import path_to
 
 from .state import State
 
@@ -23,16 +21,27 @@ class Bank(State):
         """Estimate travel plus depositing, including terrain cooldowns."""
         if self.view is None or bot.team_id is None:
             return None
+        costs, _ = self._bank_routes(bot.team_id)
+        return costs.get(bot.coordinates)
+
+    def travel_turns_from(self, point, team_id, *, hidden_penalty=HIDDEN_TERRAIN_PENALTY):
+        costs, _ = self._bank_routes(team_id, hidden_penalty=hidden_penalty)
+        return costs.get(point, float("inf")) - 1
+
+    def _bank_routes(self, team_id, avoided=frozenset(), hidden_penalty=HIDDEN_TERRAIN_PENALTY):
         bases = self.map_state.bases if self.map_state is not None else self.view["bases"]
-        key = ("bank_return_costs", bot.team_id)
+        key = ("bank_return_routes", team_id, avoided, hidden_penalty)
         if key not in self._route_cache:
             # One reverse search from every depot serves all workers. Reverse
             # edges pay for entering the current tile, not the neighbor.
             width, height = self.grid["width"], self.grid["height"]
             blocked = {(b["position"]["x"], b["position"]["y"])
-                       for b in bases if b["teamId"] != bot.team_id}
+                       for b in bases if b["teamId"] != team_id} | avoided
             costs = {(b["position"]["x"], b["position"]["y"]): 1
-                     for b in bases if b["teamId"] == bot.team_id}
+                     for b in bases if b["teamId"] == team_id
+                     and (b["position"]["x"], b["position"]["y"]) not in blocked
+                     and self.grid["cells"][b["position"]["y"] * width + b["position"]["x"]]["type"] != "void"}
+            steps = {}
             queue = [(cost, point) for point, cost in costs.items()]
             heapify(queue)
             while queue:
@@ -40,7 +49,7 @@ class Bank(State):
                 if costs[point] != cost:
                     continue
                 kind = self.grid["cells"][point[1] * width + point[0]]["type"]
-                step = OBSTACLE_COST if kind in ("mountain", "crater") else 1 + (HIDDEN_TERRAIN_PENALTY if kind == "hidden" else 0)
+                step = OBSTACLE_COST if kind in ("mountain", "crater") else 1 + (hidden_penalty if kind == "hidden" else 0)
                 for dy in range(-1, 2):
                     for dx in range(-1, 2):
                         neighbor = (point[0] + dx, point[1] + dy)
@@ -51,85 +60,26 @@ class Bank(State):
                             continue
                         if cost + step < costs.get(neighbor, float("inf")):
                             costs[neighbor] = cost + step
+                            steps[neighbor] = point
                             heappush(queue, (cost + step, neighbor))
-            self._route_cache[key] = costs
-        return self._route_cache[key].get(bot.coordinates)
+            self._route_cache[key] = costs, steps
+        return self._route_cache[key]
 
     def next_action(self, bot: Bot) -> tuple[Coordinate | None, Action]:
         team_id = bot.team_id
         if self.view is None or team_id is None:
             return (None, SimpleAction(type="pass"))
 
-        grid = self.grid
-        avoided = self.route_avoidance.get(bot.coordinates, frozenset())
-        if avoided:
-            # Replan around a confirmed movement loop without changing memory.
-            grid = dict(grid, cells=[
-                {"type": "void"} if (index % grid["width"], index // grid["width"]) in avoided else cell
-                for index, cell in enumerate(grid["cells"])
-            ])
         bases = self.map_state.bases if self.map_state is not None else self.view["bases"]
-        start: Coordinate = {"x": bot.coordinates[0], "y": bot.coordinates[1]}
-        friendly_bases = [
-            base for base in bases if base["teamId"] == team_id
-        ]
-
-        for base in friendly_bases:
-            if base["position"] == start:
-                return (None, SimpleAction(type="deposit"))
-
-        candidates: list[tuple[int, list[Coordinate]]] = []
-        for base in friendly_bases:
-            destination = base["position"]
-
-            # The known-map path avoids hidden terrain.
-            known_path = path_to(
-                grid,
-                start,
-                destination,
-                bases=bases,
-                team_id=team_id,
-                obstacle_cost=OBSTACLE_COST,
-            )
-            if known_path is not None:
-                candidates.append((self._path_cost(grid, known_path), known_path))
-
-            # Also consider the shortest route through hidden tiles. Each
-            # hidden tile costs extra to account for its unknown terrain.
-            hidden_path = self._path_through_hidden(
-                grid, start, destination, bases, team_id
-            )
-            if hidden_path is not None:
-                candidates.append(
-                    (
-                        self._path_cost(
-                            grid, hidden_path, hidden_penalty=HIDDEN_TERRAIN_PENALTY
-                        ),
-                        hidden_path,
-                    )
-                )
-
-        if not candidates:
-            return (None, SimpleAction(type="pass"))
-
-        _, shortest_path = min(candidates, key=lambda candidate: candidate[0])
-        if not shortest_path:
-            return (None, SimpleAction(type="deposit"))
-
-        destination = shortest_path[0]
-        delta = (destination["x"] - start["x"], destination["y"] - start["y"])
-        direction_by_delta: dict[tuple[int, int], Direction] = {
-            (0, -1): "north",
-            (1, -1): "north-east",
-            (1, 0): "east",
-            (1, 1): "south-east",
-            (0, 1): "south",
-            (-1, 1): "south-west",
-            (-1, 0): "west",
-            (-1, -1): "north-west",
-        }
-        direction = direction_by_delta[delta]
-        return (destination, {"type": "move", "direction": direction})
+        if any(b["teamId"] == team_id and
+               (b["position"]["x"], b["position"]["y"]) == bot.coordinates for b in bases):
+            return None, {"type": "deposit"}
+        avoided = self.route_avoidance.get(bot.coordinates, frozenset())
+        _, steps = self._bank_routes(team_id, avoided)
+        destination = steps.get(bot.coordinates)
+        if destination is None:
+            return None, {"type": "pass"}
+        return self._move(bot.coordinates, destination, {destination: bot.coordinates})
 
     @staticmethod
     def _path_cost(

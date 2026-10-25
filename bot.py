@@ -20,6 +20,7 @@ class Bot:
         self.build_in_center = False
         self.build_planned = False
         self.trade_from: str | None = None
+        self.funding_return = False
         self.ending = False
         self.return_buffer = 0
         # A region index selects center mining; None selects perimeter patrol.

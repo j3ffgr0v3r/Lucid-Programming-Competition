@@ -85,7 +85,9 @@ class OreTripDeadlineTests(unittest.TestCase):
         self.ore(1, 2)
         manager = Manager(self.snapshot, self.identity)
         manager.calculate_actions(self.snapshot)
-        self.assertEqual(manager.bots["worker"].ore_target, (4, 3))
+        # Simulate a previously selected trip; the new scoring prefers the
+        # other deposit even before this trip becomes too long.
+        manager.bots["worker"].ore_target = (4, 3)
         self.view["turn"] = 474
         manager.calculate_actions(self.snapshot)
         self.assertEqual(manager.bots["worker"].ore_target, (1, 2))

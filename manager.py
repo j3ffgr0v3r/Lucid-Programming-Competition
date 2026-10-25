@@ -28,6 +28,10 @@ ENDING_MIN_TURNS = 3
 CENTER_SEARCH_BUFFER = 3
 CENTER_BOT_COUNT = 2
 LOOP_AVOID_TURNS = 4
+# Conservative planning estimates, in eventual banked gold per remaining turn.
+WORKER_GOLD_RATE = 0.15
+BASE_GOLD_RATE = 0.10
+FUNDING_GOLD_RATE = 0.15
 
 
 def bot_costs() -> Iterator[int]:
@@ -57,6 +61,8 @@ class Manager:
         self._center_ids: set[str] = set()
         self._patrol_order: list[str] = []
         self._build_assignments: dict[str, tuple[int, int]] = {}
+        self.funding_project = None
+        self._gold_trade_ids: set[str] = set()
         self._bot_costs = bot_costs()
         self._recruited_workers = 0
         self.next_bot_cost = next(self._bot_costs)
@@ -118,6 +124,8 @@ class Manager:
     def strategize(self):
         """Build the network, mine for gold, then return each rover in time."""
         our_bases = [b for b in self.map_state.bases if b["teamId"] == self.team_id]
+        self.funding_project = None
+        self._gold_trade_ids.clear()
         if self.phase == "construction" and (
             self.turn >= self.construction_end_turn
             or (len(our_bases) >= self.base_target and len(self.bots) >= self.worker_target)
@@ -129,12 +137,14 @@ class Manager:
         remaining = self.max_turns - self.turn
         for bot in self.bots.values():
             worker = self.workers[bot.id]
+            if self.phase != "construction" or not worker.get("inventory", {}).get("iron", 0):
+                bot.funding_return = False
             bank_turns = self.states["Bank"].turns_to_bank(bot)
             cooldown = max(0, worker["readyOnTurn"] - self.turn)
             conversions = worker.get("inventory", {}).get("iron", 0) // 3
             return_budget = (bank_turns if bank_turns is not None else 0) + cooldown + conversions + ENDING_RETURN_BUFFER
             bot.ending = bot.ending or remaining <= max(ENDING_MIN_TURNS, return_budget)
-            bot.trade_from = "gold" if self.phase == "construction" and not bot.ending else "iron"
+            bot.trade_from = None if self.phase == "construction" and not bot.ending else "iron"
             bot.return_buffer = ENDING_RETURN_BUFFER
             bot.set_state("Ending" if bot.ending else (
                 "Trade" if self.phase != "construction" else
@@ -150,6 +160,7 @@ class Manager:
             uid: point for uid, point in self._build_assignments.items()
             if uid in self.bots and not self.bots[uid].ending
             and self.base_planner.legal(point, self.team_id)
+            and self._can_finish_base(self.bots[uid], point)
         }
         iron = self.bank["iron"]
         # Bootstrap the first few rovers, then reserve base funding so growing
@@ -191,13 +202,114 @@ class Manager:
                         and self.workers[bot.id]["readyOnTurn"] <= self.turn),
                        key=lambda bot: (bot.id in self._center_ids, bot.id))
         for bot in ready:
-            if len(self.bots) + recruits >= self.worker_target or iron < price:
+            if (len(self.bots) + recruits >= self.worker_target or iron < price
+                    or not self._project_pays_back("worker", price, 0, 0, 0)):
                 break
             bot.set_state("SpawnBot")
             recruits += 1
             iron -= price
             price = next(prices)
         self.states["BuildBase"].set_iron_budget(6 * len(assigned))
+        self._plan_gold_funding(our_bases, assigned, iron, recruits, price)
+
+    def _project_pays_back(self, kind, cost, converted_iron, funding_turns, travel_turns):
+        # Banked/native iron's opportunity cost is one gold per three iron;
+        # manufacturing iron consumes three gold per iron instead.
+        gold_cost = (cost - converted_iron) / 3 + converted_iron * 3
+        rate = WORKER_GOLD_RATE if kind == "worker" else BASE_GOLD_RATE
+        productive_turns = self.max_turns - self.turn - funding_turns - travel_turns - 1
+        return productive_turns * rate >= gold_cost
+
+    def _can_finish_base(self, bot, point):
+        enemies = {(b["position"]["x"], b["position"]["y"])
+                   for b in self.map_state.bases if b["teamId"] != self.team_id}
+        routes, _ = self.states["BuildBase"]._routes(bot.coordinates, enemies, allow_hidden=True)
+        travel = routes.get(point, float("inf")) + max(0, self.workers[bot.id]["readyOnTurn"] - self.turn)
+        return (travel + 1 < self.construction_end_turn - self.turn
+                and self._project_pays_back("base", 6, 0, 0, travel))
+
+    def _plan_gold_funding(self, bases, assigned, iron, recruits, next_price):
+        """Fund one concrete next project, capped by its shared iron shortfall."""
+        committed = assigned + [b.id for b in self.bots.values() if b.state == "SpawnBot"]
+        free = [b for b in self.bots.values() if b.id not in committed and not b.ending]
+        if not free:
+            return
+        bank = self.states["Bank"]
+        deliveries = {}
+        for bot in free:
+            travel = bank.turns_to_bank(bot)
+            if travel is not None:
+                deliveries[bot.id] = travel + max(0, self.workers[bot.id]["readyOnTurn"] - self.turn)
+        donors = [b for b in free if b.id in deliveries
+                  and deliveries[b.id] + 1 < self.construction_end_turn - self.turn]
+        carried_iron = sum(self.workers[b.id]["inventory"]["iron"] for b in donors)
+        gold_batches = sum(self.workers[b.id]["inventory"]["gold"] // 3 for b in donors)
+        if not gold_batches:
+            return
+
+        bootstrap = len(self.bots) + recruits < min(3 + len(bases) // 3, self.worker_target)
+        projects = []
+        if len(self.bots) + recruits < self.worker_target:
+            projects.append({"kind": "worker", "cost": next_price, "travel": 0,
+                             "worker": min(free, key=lambda b: b.id).id})
+        if not bootstrap and len(bases) + len(assigned) < self.base_target and len(assigned) < max(1, len(self.bots) // 3):
+            reserved = [self._build_assignments[uid] for uid in assigned]
+            center_count = sum(self.base_planner.in_center((b["position"]["x"], b["position"]["y"])) for b in bases)
+            center_count += sum(self.base_planner.in_center(p) for p in reserved)
+            outside_count = len(bases) + len(reserved) - center_count
+            prefer_center = center_count < CENTER_BASE_MIN or (center_count < CENTER_BASE_MAX and outside_count >= 2)
+            selected = next(((uid, p) for uid, p in self._build_assignments.items() if uid not in committed), None)
+            if selected is None:
+                selected = self._new_build_assignment(committed, reserved, prefer_center, center_count)
+            if selected is not None:
+                uid, point = selected
+                enemies = {(b["position"]["x"], b["position"]["y"])
+                           for b in self.map_state.bases if b["teamId"] != self.team_id}
+                routes, _ = self.states["BuildBase"]._routes(self.bots[uid].coordinates, enemies, allow_hidden=True)
+                travel = routes.get(point, float("inf"))
+                projects.insert(0, {"kind": "base", "cost": 6, "travel": travel,
+                                    "worker": uid, "site": point})
+
+        for project in projects:
+            shortfall = max(0, project["cost"] - iron - carried_iron)
+            if shortfall == 0:
+                # Incoming iron already funds the next project. Do not also
+                # count it toward another purchase and convert extra gold.
+                self._return_project_iron(donors, deliveries, project["cost"] - iron)
+                return
+            # Include time to collect missing gold, exchange it, and bank it.
+            gather = max(0, shortfall - gold_batches) * 3 / (len(donors) * FUNDING_GOLD_RATE)
+            funding_turns = gather + max(deliveries[b.id] for b in donors) + min(shortfall, 2)
+            if funding_turns + project["travel"] + 1 >= self.construction_end_turn - self.turn:
+                continue
+            if not self._project_pays_back(project["kind"], project["cost"], shortfall, funding_turns, project["travel"]):
+                continue
+            self.funding_project = dict(project, iron_shortfall=shortfall)
+            self._return_project_iron(donors, deliveries, project["cost"] - iron)
+            if project["kind"] == "base":
+                uid, point = project["worker"], project["site"]
+                if uid not in self._build_assignments:
+                    self._build_assignments[uid] = point
+                    bot = self.bots[uid]
+                    state = bot.state
+                    self.states["BuildBase"].assign(bot, {"x": point[0], "y": point[1]},
+                                                  center_only=self.base_planner.in_center(point), planned=True)
+                    bot.set_state(state)
+            for bot in sorted(donors, key=lambda b: (deliveries[b.id], b.id)):
+                worker = self.workers[bot.id]
+                if shortfall and worker["inventory"]["gold"] >= 3 and worker["readyOnTurn"] <= self.turn:
+                    self._gold_trade_ids.add(bot.id)
+                    bot.trade_from = "gold"
+                    shortfall -= 1
+            return
+
+    def _return_project_iron(self, donors, deliveries, needed):
+        for bot in sorted(donors, key=lambda b: (deliveries[b.id], b.id)):
+            carried = self.workers[bot.id]["inventory"]["iron"]
+            if needed > 0 and carried:
+                bot.ore_returning = True
+                bot.funding_return = True
+                needed -= carried
 
     def _new_build_assignment(self, assigned, reserved, prefer_center, center_count):
         planner, build = self.base_planner, self.states["BuildBase"]
@@ -220,7 +332,8 @@ class Manager:
                             if point in routes[bot.id]
                             and not (occupied.get(point, set()) - {bot.id})
                             and (center or self.states["PatrolOre"].in_sector(point, bot))
-                            and routes[bot.id][point] + 1 < self.construction_end_turn - self.turn]
+                            and routes[bot.id][point] + 1 < self.construction_end_turn - self.turn
+                            and self._project_pays_back("base", 6, 0, 0, routes[bot.id][point])]
                 if eligible:
                     bot = min(eligible, key=lambda bot: (routes[bot.id][point], bot.id))
                     return bot.id, point
@@ -255,7 +368,7 @@ class Manager:
 
     def _mine_on_the_way(self, bot, worker, action):
         """Pause travel to mine underfoot while preserving the assigned trip."""
-        if action["type"] != "move" or bot.ending:
+        if action["type"] != "move" or bot.ending or (bot.funding_return and bot.ore_returning):
             return action
         inventory = worker.get("inventory", {"gold": 0, "iron": 0})
         room = worker.get("inventoryCapacity", 8) - sum(inventory.values())
@@ -377,9 +490,10 @@ class Manager:
                 state = self.states[bot.state]
                 if bot.state in self.ore_states and bot.search_area_index is not None:
                     state = self.ore_states[bot.state][bot.search_area_index]
-                inventory = workers[unit_id].get("inventory", {"gold": 0, "iron": 0})
-                if self.phase == "construction" and not bot.ending and bot.state != "SpawnBot" and inventory["gold"] >= 3:
+                if unit_id in self._gold_trade_ids:
                     action = {"type": "trade", "from": "gold"}
+                    bot.ore_returning = True
+                    bot.funding_return = True
                 else:
                     result = state.next_action(bot)
                     action = result[1] if isinstance(result, tuple) else result

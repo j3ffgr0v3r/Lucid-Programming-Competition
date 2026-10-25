@@ -103,7 +103,7 @@ class FindOreState(State):
             bot.ore_target = bot.coordinates
         elif bot.ore_target not in ores:
             bot.ore_target = min(
-                ores, key=lambda point: self._ore_priority(point, distances), default=None
+                ores, key=lambda point: self._ore_priority(point, distances, bot, worker, available(point)), default=None
             )
         if bot.ore_target is not None:
             self.ore_reservations.setdefault(bot.ore_target, {})[bot.id] = min(
@@ -138,6 +138,15 @@ class FindOreState(State):
         if mining_turns > amount or mining_turns > capacity - sum(inventory.values()):
             return False
 
+        return_turns = self._return_turns(point, bot)
+        return travel_turns + mining_turns + trade_turns + return_turns + 1 + bot.return_buffer <= self.turns_left
+
+    def _return_turns(self, point, bot):
+        bank = self.states.get("Bank")
+        if bank is not None:
+            # Share a reverse search across all deposits and workers; retain
+            # the conservative three-turn estimate for unseen terrain.
+            return bank.travel_turns_from(point, bot.team_id, hidden_penalty=self.obstacle_cost - 1)
         enemy_bases = {
             (base["position"]["x"], base["position"]["y"])
             for base in self.view["bases"] if base["teamId"] != bot.team_id
@@ -152,7 +161,7 @@ class FindOreState(State):
             # Banking may leave a patrol's perimeter to take the fastest route.
             distances, _ = State._routes(self, home, enemy_bases, allow_hidden=True)
             return_turns = min(return_turns, distances.get(point, float("inf")))
-        return travel_turns + mining_turns + trade_turns + return_turns + 1 + bot.return_buffer <= self.turns_left
+        return return_turns
 
     def _bank_action(self, bot: Bot) -> Action:
         bot.ore_returning = True
@@ -230,8 +239,24 @@ class FindOreState(State):
     def _resource_allowed(self, cell) -> bool:
         return self.resource is None or cell["type"] == self.resource
 
-    def _ore_priority(self, point, distances):
-        return distances[point], point[1], point[0]
+    def _ore_priority(self, point, distances, bot=None, worker=None, amount=None):
+        if bot is None or not (bot.trade_from == "iron" or bot.state == "Trade"):
+            # Construction collects resources for its selected projects.
+            return distances[point], point[1], point[0]
+        inventory = worker.get("inventory", {"gold": 0, "iron": 0}) if worker else {"gold": 0, "iron": 0}
+        capacity = worker.get("inventoryCapacity", 8) if worker else 8
+        cell = self.grid["cells"][point[1] * self.grid["width"] + point[0]]
+        stock = cell["amount"] if amount is None else amount
+        return_turns = self._return_turns(point, bot)
+        best_rate = 0.0
+        for pickup in range(1, min(stock, capacity - sum(inventory.values())) + 1):
+            iron = inventory["iron"] + (pickup if cell["type"] == "iron" else 0)
+            trades = iron // 3
+            gold = pickup if cell["type"] == "gold" else trades - inventory["iron"] // 3
+            turns = distances[point] + pickup + trades + return_turns + 1
+            if self.turns_left is None or turns + bot.return_buffer <= self.turns_left:
+                best_rate = max(best_rate, gold / turns)
+        return -best_rate, distances[point] + return_turns, distances[point], point[1], point[0]
 
     def _ore_routes(self, bot, enemy_bases):
         return self._routes(bot.coordinates, enemy_bases, allow_hidden=True)
